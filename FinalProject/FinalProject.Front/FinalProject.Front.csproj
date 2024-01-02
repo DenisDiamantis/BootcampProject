@@ -7,11 +7,14 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\FinalProject.Data\FinalProject.Data.csproj" />
+    <Compile Remove="Pages\Folders\**" />
+    <Content Remove="Pages\Folders\**" />
+    <EmbeddedResource Remove="Pages\Folders\**" />
+    <None Remove="Pages\Folders\**" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Pages\Folders\" />
+    <ProjectReference Include="..\FinalProject.Data\FinalProject.Data.csproj" />
   </ItemGroup>
 
 </Project>

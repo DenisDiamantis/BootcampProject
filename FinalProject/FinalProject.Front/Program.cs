@@ -11,6 +11,11 @@ builder.Services.AddHttpClient<AccountService>(client =>
 	client.BaseAddress = new Uri("https://localhost:7193");
 });
 
+builder.Services.AddHttpClient<CandidateService>(client =>
+{
+	client.BaseAddress = new Uri("https://localhost:7193");
+});
+
 builder.Services.AddSingleton<IContextHelper, ContextHelper>();
 
 builder.Services.AddAuthentication("CookieAuthentication")

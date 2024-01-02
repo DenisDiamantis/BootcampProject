@@ -9,6 +9,7 @@ namespace FinalProject.Data.Dtos
 {
     public class CandidateDto
     {
+        public int Id { get; set; }
         public Guid Number { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
@@ -22,6 +23,7 @@ namespace FinalProject.Data.Dtos
         {
             return new CandidateDto
             {
+                Id = candidate.Id,
                 Number = candidate.Number,
                 FirstName = candidate.User.FirstName,
                 LastName = candidate.User.LastName,
