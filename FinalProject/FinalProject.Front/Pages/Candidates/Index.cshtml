@@ -1,0 +1,48 @@
+﻿@page
+@model FinalProject.Front.Pages.Candidates.IndexModel
+@{
+	ViewData["Title"] = "Index";
+}
+
+<h1>Candidates</h1>
+
+
+<table class="table">
+	<thead>
+		<tr>
+			<th>First Name</th>
+			<th>Last Name</th>
+			<th>Candidate Number</th>
+			<th>Email</th>
+			<th>Address</th>
+			<th>Phone</th>
+			<th>Birthdate</th>
+		</tr>
+
+</thead>
+<tbody>
+	@foreach (var candidate in Model.Candidates)
+	{
+		<tr>
+			<td>@candidate.FirstName</td>
+			<td>@candidate.LastName</td>
+			<td>@candidate.Number</td>
+			<td>@candidate.Email</td>
+			<td>@candidate.Address</td>
+			<td>@candidate.Phone</td>
+			<td>@candidate.BirthDate</td>
+			<td>
+				<a asp-page="./Edit" asp-route-id="@candidate.Id">Edit</a> |
+				<a asp-page="./Details" asp-route-id="@candidate.Id">Details</a> |
+				<a asp-page="./Delete" asp-route-id="@candidate.Id">Delete</a>
+			</td>
+		</tr>
+	}
+</tbody>
+</table>
+
+<div>
+	<a class="btn btn-primary" asp-page="/Candidates/Create">Create New Candidate</a>
+</div>
+
+

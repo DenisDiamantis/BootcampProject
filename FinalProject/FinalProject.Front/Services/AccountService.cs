@@ -142,7 +142,7 @@ namespace FinalProject.Front.Services
         }
 
         //Delete an account
-        public async Task DeleteAccount(int id)
+        public async Task DeleteAccountAsync(int id)
         {
             await _httpClient.DeleteAsync($"{_apiBaseUrl}/{id}");
         }

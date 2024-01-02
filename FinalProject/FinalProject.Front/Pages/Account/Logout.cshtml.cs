@@ -14,7 +14,7 @@ namespace FinalProject.Front.Pages
         public async Task<IActionResult> OnGetAsync()
         {
             await HttpContext.SignOutAsync("CookieAuthentication");
-            return RedirectToPage("/Index");
+            return RedirectToPage("./Login");
         }
     }
 }

@@ -30,8 +30,7 @@ namespace FinalProject.Back.Controllers
             return Ok(result);
         }
 
-        [HttpGet]
-        [Route("{id}")]
+        [HttpGet("{id}")]
         public async Task<ActionResult<CandidateDto>> GetCandidateById(int id)
         {
             var candidate = await _context.Candidates.Include(x => x.User)
@@ -45,6 +44,8 @@ namespace FinalProject.Back.Controllers
             return Ok(CandidateDto.FromEntity(candidate));
         }
 
+
+        // create candidate
         [HttpPost]
         public async Task<ActionResult<CandidateDto>> CreateCandidate(CandidateDto candidateDto)
         {
@@ -79,9 +80,9 @@ namespace FinalProject.Back.Controllers
             return Ok(candidateDto);
         }
 
-        [HttpPost]
-        [Route("id")]
-        public async Task<ActionResult<CandidateDto>> UpdateCandidate(int id, CandidateDto candidateDto)
+		// update candidate
+		[HttpPut("{id}")]
+		public async Task<ActionResult<CandidateDto>> UpdateCandidate(int id, CandidateDto candidateDto)
         {
             if (!ModelState.IsValid)
             {
@@ -91,7 +92,10 @@ namespace FinalProject.Back.Controllers
             var candidate = await _context.Candidates.Include(x => x.User)
                 .FirstOrDefaultAsync(x => x.Id == id);
 
-            if (candidate == null)
+			var passwordHasher = new PasswordHasher<User>();
+			var encryptedPassword = passwordHasher.HashPassword(new User(), candidateDto.Password);
+
+			if (candidate == null)
             {
                 return NotFound();
             }
@@ -99,6 +103,7 @@ namespace FinalProject.Back.Controllers
             candidate.User.FirstName = candidateDto.FirstName;
             candidate.User.LastName = candidateDto.LastName;
             candidate.User.Email = candidateDto.Email;
+            candidate.User.Password = encryptedPassword;
             candidate.User.Phone = candidateDto.Phone;
             candidate.User.Address = candidateDto.Address;
             candidate.BirthDate = candidateDto.BirthDate;
@@ -108,12 +113,12 @@ namespace FinalProject.Back.Controllers
             return Ok(CandidateDto.FromEntity(candidate));
         }
 
-        [HttpDelete]
-        [Route("{id}")]
+        [HttpDelete("{id}")]
         public async Task<ActionResult<CandidateDto>> DeleteCandidate(int id)
         {
             var candidate = await _context.Candidates.Include(x => x.User)
                 .FirstOrDefaultAsync(x => x.Id == id);
+
 
             if (candidate == null)
             {
@@ -121,6 +126,9 @@ namespace FinalProject.Back.Controllers
             }
 
             _context.Candidates.Remove(candidate);
+
+            //delete user as well
+            _context.Users.Remove(candidate.User);
             await _context.SaveChangesAsync();
 
             return Ok(CandidateDto.FromEntity(candidate));
