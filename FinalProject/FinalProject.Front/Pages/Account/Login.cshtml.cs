@@ -54,7 +54,8 @@ namespace FinalProject.Front.Pages
 						new Claim(ClaimTypes.Role, result.User.Role!),
 						new Claim(ClaimTypes.Hash, result.Token),
 						new Claim(ClaimTypes.Email, result.User.Email),
-                        
+						new Claim(ClaimTypes.NameIdentifier, result.User.Id.ToString()),
+						
                         // You can add other claims as needed
                     };
 
