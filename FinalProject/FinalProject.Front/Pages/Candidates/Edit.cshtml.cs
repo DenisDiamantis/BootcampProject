@@ -1,10 +1,12 @@
 using FinalProject.Data.Dtos;
 using FinalProject.Front.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace FinalProject.Front.Pages.Candidates
 {
+	[Authorize(Roles = "admin")]
 	public class EditModel : PageModel
 	{
 		private readonly CandidateService _candidateService;
