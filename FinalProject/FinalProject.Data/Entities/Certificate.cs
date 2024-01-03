@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using FinalProject.Data.Dtos.CertificateDtos;
 
 namespace FinalProject.Data.Entities
 {
@@ -10,5 +6,14 @@ namespace FinalProject.Data.Entities
     {
         public int Id { get; set; }
         public string Title { get; set; }
+
+
+        public static Certificate ToEntity(CertificateCreateDto certificateCreateDto)
+        {
+            return new Certificate
+            {
+                Title = certificateCreateDto.Title
+            };
+        }
     }
 }

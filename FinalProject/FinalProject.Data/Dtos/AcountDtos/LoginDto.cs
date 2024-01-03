@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace FinalProject.Data.Dtos
+﻿namespace FinalProject.Data.Dtos.AcountDtos
 {
     public class LoginDto
     {
@@ -15,9 +9,9 @@ namespace FinalProject.Data.Dtos
     public class LoginResponseDto
     {
         public bool IsSuccess { get; set; }
-        public string Token { get; set; } 
+        public string Token { get; set; }
         public UserProfileDto User { get; set; }
         public string Message { get; set; }
-        
+
     }
 }
