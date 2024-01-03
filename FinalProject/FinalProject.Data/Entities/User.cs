@@ -27,5 +27,7 @@ namespace FinalProject.Data.Entities
         public string Role { get; set; } = "";
 
         public DateTime CreatedAt { get; set; } = DateTime.Now;
+
+        public List<Certificate> Certificates { get; set; }
     }
 }

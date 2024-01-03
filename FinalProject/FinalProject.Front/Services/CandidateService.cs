@@ -1,12 +1,10 @@
 ﻿using FinalProject.Data.Dtos;
-using FinalProject.Front.Helpers;
-using Microsoft.AspNetCore.Mvc;
 using System.Text;
 using System.Text.Json;
 
 namespace FinalProject.Front.Services
 {
-    
+
     public class CandidateService
     {
         private readonly HttpClient _httpClient;
@@ -67,8 +65,8 @@ namespace FinalProject.Front.Services
         public async Task<CandidateDto> UpdateCandidateAsync(CandidateDto candidateDto)
         {
             var content = new StringContent(JsonSerializer.Serialize(candidateDto), Encoding.UTF8, "application/json");
-			
-			var response = await _httpClient.PutAsync($"{_apiBaseUrl}/{candidateDto.Id}", content);
+
+            var response = await _httpClient.PutAsync($"{_apiBaseUrl}/{candidateDto.Id}", content);
             response.EnsureSuccessStatusCode();
             using var responseContent = await response.Content.ReadAsStreamAsync();
             var result = await JsonSerializer.DeserializeAsync<CandidateDto>(responseContent,

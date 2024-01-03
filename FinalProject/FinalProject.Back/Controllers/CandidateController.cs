@@ -1,7 +1,6 @@
 ﻿using FinalProject.Back.Contexts;
 using FinalProject.Data.Dtos;
 using FinalProject.Data.Entities;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;

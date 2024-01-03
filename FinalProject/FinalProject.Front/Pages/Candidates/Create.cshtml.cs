@@ -11,20 +11,20 @@ namespace FinalProject.Front.Pages.Candidates
 
         public CreateModel(CandidateService candidateService)
         {
-			_candidateService = candidateService;
-		}
+            _candidateService = candidateService;
+        }
 
         [BindProperty]
-		public CandidateDto Candidate { get; set; }
+        public CandidateDto Candidate { get; set; }
 
-		public async Task<IActionResult> OnPostAsync()
+        public async Task<IActionResult> OnPostAsync()
         {
-			if (!ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
-				return Page();
-			}
-			await _candidateService.CreateCandidateAsync(Candidate);
-			return RedirectToPage("/Candidates/Index");
-		}
+                return Page();
+            }
+            await _candidateService.CreateCandidateAsync(Candidate);
+            return RedirectToPage("/Candidates/Index");
+        }
     }
 }

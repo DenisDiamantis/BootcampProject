@@ -8,33 +8,39 @@ builder.Services.AddRazorPages();
 
 builder.Services.AddHttpClient<AccountService>(client =>
 {
-	client.BaseAddress = new Uri("https://localhost:7193");
+    client.BaseAddress = new Uri("https://localhost:7193");
 });
 
 builder.Services.AddHttpClient<CandidateService>(client =>
 {
-	client.BaseAddress = new Uri("https://localhost:7193");
+    client.BaseAddress = new Uri("https://localhost:7193");
+});
+
+
+builder.Services.AddHttpClient<CertificateService>(client =>
+{
+    client.BaseAddress = new Uri("https://localhost:7193");
 });
 
 builder.Services.AddSingleton<IContextHelper, ContextHelper>();
 
 builder.Services.AddAuthentication("CookieAuthentication")
-		.AddCookie("CookieAuthentication", options =>
-		{
+        .AddCookie("CookieAuthentication", options =>
+        {
 
-			options.LoginPath = "/Login"; // Your login path
-			options.AccessDeniedPath = "/Error"; // Path for access denied
-			options.LogoutPath = "/";
-		});
+            options.LoginPath = "/Login"; // Your login path
+            options.AccessDeniedPath = "/Error"; // Path for access denied
+            options.LogoutPath = "/";
+        });
 
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
 {
-	app.UseExceptionHandler("/Error");
-	// The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
-	app.UseHsts();
+    app.UseExceptionHandler("/Error");
+    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
+    app.UseHsts();
 }
 
 app.UseHttpsRedirection();
