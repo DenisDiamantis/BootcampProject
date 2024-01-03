@@ -56,9 +56,8 @@ namespace FinalProject.Back.Controllers
 
         }
 
-        [HttpPut]
-        [Route("id")]
-        [Authorize(Roles = "admin")]
+		[HttpPut("{id}")]
+		[Authorize(Roles = "admin")]
         public async Task<ActionResult<CertificateViewDto>> UpdateCertificate(int id, CertificateCreateDto certificateDto)
         {
             var certificate = await _context.Certificates.FirstOrDefaultAsync(x => x.Id == id);

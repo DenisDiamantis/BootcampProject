@@ -8,12 +8,12 @@ namespace FinalProject.Front.Pages.Candidates
     public class DeleteModel : PageModel
     {
         private readonly CandidateService _candidateService;
-        
+
 
         public DeleteModel(CandidateService candidateService, AccountService accountService)
         {
             _candidateService = candidateService;
-            
+
         }
 
         [BindProperty]
