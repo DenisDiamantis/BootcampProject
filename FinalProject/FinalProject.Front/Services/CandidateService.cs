@@ -37,6 +37,18 @@ namespace FinalProject.Front.Services
             return result;
         }
 
+        //Get candidate by user id
+        public async Task<CandidateDto> GetCandidateByUserIdAsync(int userId)
+        {
+           var response = await _httpClient.GetAsync($"{_apiBaseUrl}/user/{userId}");
+            response.EnsureSuccessStatusCode();
+            using var responseContent = await response.Content.ReadAsStreamAsync();
+            var result = await JsonSerializer.DeserializeAsync<CandidateDto>(responseContent,
+                                                             new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+            return result;
+        }
+        //++
+
         //Create candidate
         public async Task<CandidateDto> CreateCandidateAsync(CandidateDto candidateDto)
         {

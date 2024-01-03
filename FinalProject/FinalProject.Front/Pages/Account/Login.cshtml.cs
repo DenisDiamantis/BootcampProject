@@ -47,14 +47,14 @@ namespace FinalProject.Front.Pages
                 if (result.IsSuccess)
                 {
 
-
-                    var claims = new List<Claim>
-                    {
-                        new Claim(ClaimTypes.Name,result.User.FirstName+" "+result.User.LastName ),
-                        new Claim(ClaimTypes.Role, result.User.Role!),
-                        new Claim(ClaimTypes.Hash, result.Token),
-                        new Claim(ClaimTypes.Email, result.User.Email),
-                        
+					var claims = new List<Claim>
+					{
+						new Claim(ClaimTypes.Name,result.User.FirstName+" "+result.User.LastName ),
+						new Claim(ClaimTypes.Role, result.User.Role!),
+						new Claim(ClaimTypes.Hash, result.Token),
+						new Claim(ClaimTypes.Email, result.User.Email),
+						new Claim(ClaimTypes.NameIdentifier, result.User.Id.ToString()),
+						
                         // You can add other claims as needed
                     };
 
