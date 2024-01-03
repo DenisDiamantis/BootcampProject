@@ -1,4 +1,4 @@
-﻿using FinalProject.Data.Dtos;
+﻿using FinalProject.Data.Dtos.AcountDtos;
 using FinalProject.Front.Helpers;
 using FinalProject.Front.Services;
 using Microsoft.AspNetCore.Authentication;
@@ -8,7 +8,7 @@ using System.Security.Claims;
 
 namespace FinalProject.Front.Pages
 {
-	public class LoginModel : PageModel
+    public class LoginModel : PageModel
 	{
 
 		private readonly AccountService _accountService;

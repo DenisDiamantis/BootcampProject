@@ -1,4 +1,4 @@
-using FinalProject.Data.Dtos;
+using FinalProject.Data.Dtos.AcountDtos;
 using FinalProject.Front.Helpers;
 using FinalProject.Front.Services;
 using Microsoft.AspNetCore.Mvc;
@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 namespace FinalProject.Front.Pages
 {
 
-	public class GetUsersModel : PageModel
+    public class GetUsersModel : PageModel
 	{
 
 		private readonly AccountService _accountService;

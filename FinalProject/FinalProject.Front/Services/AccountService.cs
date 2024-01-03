@@ -1,4 +1,4 @@
-﻿using FinalProject.Data.Dtos;
+﻿using FinalProject.Data.Dtos.AcountDtos;
 using FinalProject.Front.Helpers;
 using Microsoft.AspNetCore.Identity.Data;
 using System.Net.Http.Headers;
