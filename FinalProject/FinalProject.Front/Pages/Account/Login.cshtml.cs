@@ -62,15 +62,7 @@ namespace FinalProject.Front.Pages
                     var claimsPrincipal = new ClaimsPrincipal(claimsIdentity);
                     await HttpContext.SignInAsync("CookieAuthentication", claimsPrincipal);
 
-                    // Redirect to the appropriate page after successful login
-                    if (result.User.Role == "admin")
-                    {
-                        return Redirect("/AdminHome");
-                    }
-                    else
-                    {
-                        return Redirect("/");
-                    }
+                    return Redirect("/");
                 }
                 else
                 {
