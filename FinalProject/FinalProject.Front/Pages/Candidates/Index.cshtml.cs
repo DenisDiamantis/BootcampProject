@@ -6,7 +6,8 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace FinalProject.Front.Pages.Candidates
 {
-    [Authorize(Roles = "admin")]
+
+    [Authorize(Roles = "admin,qualityAssurance")]
     public class IndexModel : PageModel
     {
         private readonly CandidateService _candidateService;
