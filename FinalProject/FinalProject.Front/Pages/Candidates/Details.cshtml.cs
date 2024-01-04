@@ -9,23 +9,23 @@ namespace FinalProject.Front.Pages.Candidates
     {
         private readonly CandidateService _candidateService;
 
-		public CandidateDto Candidate { get; set; }
+        public CandidateDto Candidate { get; set; }
 
-		public DetailsModel(CandidateService candidateService)
-		{
-			_candidateService = candidateService;
-		}
-
-        
-
-		public async Task<IActionResult> OnGetAsync(int id)
+        public DetailsModel(CandidateService candidateService)
         {
-			Candidate = await _candidateService.GetCandidateByIdAsync(id);
-			if (Candidate == null)
+            _candidateService = candidateService;
+        }
+
+
+
+        public async Task<IActionResult> OnGetAsync(int id)
+        {
+            Candidate = await _candidateService.GetCandidateByIdAsync(id);
+            if (Candidate == null)
             {
-				return NotFound();
-			}
-			return Page();
-		}
+                return NotFound();
+            }
+            return Page();
+        }
     }
 }

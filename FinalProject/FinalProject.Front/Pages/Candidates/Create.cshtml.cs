@@ -8,6 +8,7 @@ namespace FinalProject.Front.Pages.Candidates
 {
 	[Authorize(Roles = "admin")]
 
+
 	public class CreateModel : PageModel
 	{
 		private readonly CandidateService _candidateService;

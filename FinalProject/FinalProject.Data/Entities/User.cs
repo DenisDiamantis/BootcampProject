@@ -9,6 +9,7 @@ namespace FinalProject.Data.Entities
 {
     public class User
     {
+        public static object Claims { get; set; }
         public int Id { get; set; }
         [MaxLength(100)]
         public string FirstName { get; set; } = "";
@@ -26,5 +27,7 @@ namespace FinalProject.Data.Entities
         public string Role { get; set; } = "";
 
         public DateTime CreatedAt { get; set; } = DateTime.Now;
+
+        public List<Certificate> Certificates { get; set; }
     }
 }

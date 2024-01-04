@@ -1,7 +1,6 @@
 ﻿using FinalProject.Back.Contexts;
 using FinalProject.Data.Dtos;
 using FinalProject.Data.Entities;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -19,6 +18,7 @@ namespace FinalProject.Back.Controllers
             _context = context;
         }
 
+        // get all candidates
         [HttpGet]
         //[Authorize(Roles = "admin")]
         public async Task<ActionResult<IEnumerable<CandidateDto>>> GetAllCertificates()
@@ -30,11 +30,27 @@ namespace FinalProject.Back.Controllers
             return Ok(result);
         }
 
+        // get candidate by id
         [HttpGet("{id}")]
         public async Task<ActionResult<CandidateDto>> GetCandidateById(int id)
         {
             var candidate = await _context.Candidates.Include(x => x.User)
                 .FirstOrDefaultAsync(x => x.Id == id);
+
+            if (candidate == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(CandidateDto.FromEntity(candidate));
+        }
+
+        // get candidate by user id
+        [HttpGet("user/{userId}")]
+        public async Task<ActionResult<CandidateDto>> GetCandidateByUserId(int userId)
+        {
+            var candidate = await _context.Candidates.Include(x => x.User)
+                .FirstOrDefaultAsync(x => x.User.Id == userId);
 
             if (candidate == null)
             {
@@ -113,6 +129,7 @@ namespace FinalProject.Back.Controllers
             return Ok(CandidateDto.FromEntity(candidate));
         }
 
+        // delete candidate
         [HttpDelete("{id}")]
         public async Task<ActionResult<CandidateDto>> DeleteCandidate(int id)
         {

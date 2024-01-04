@@ -11,33 +11,34 @@ namespace FinalProject.Front.Pages.Candidates
 	{
 		private readonly CandidateService _candidateService;
 
-		public EditModel(CandidateService candidateService)
-		{
-			_candidateService = candidateService;
-		}
 
-		[BindProperty]
-		public CandidateDto Candidate { get; set; }
+        public EditModel(CandidateService candidateService)
+        {
+            _candidateService = candidateService;
+        }
 
-		public async Task<IActionResult> OnGetAsync(int id)
-		{
-			Candidate = await _candidateService.GetCandidateByIdAsync(id);
-			if (Candidate == null)
-			{
-				return NotFound();
-			}
-			return Page();
-		}
+        [BindProperty]
+        public CandidateDto Candidate { get; set; }
 
-		public async Task<IActionResult> OnPostAsync()
-		{
-			if (!ModelState.IsValid)
-			{
-				return Page();
-			}
-			await _candidateService.UpdateCandidateAsync(Candidate);
-			return RedirectToPage("/Candidates/Index");
-		}
+        public async Task<IActionResult> OnGetAsync(int id)
+        {
+            Candidate = await _candidateService.GetCandidateByIdAsync(id);
+            if (Candidate == null)
+            {
+                return NotFound();
+            }
+            return Page();
+        }
 
-	}
+        public async Task<IActionResult> OnPostAsync()
+        {
+            if (!ModelState.IsValid)
+            {
+                return Page();
+            }
+            await _candidateService.UpdateCandidateAsync(Candidate);
+            return RedirectToPage("/Candidates/Index");
+        }
+
+    }
 }

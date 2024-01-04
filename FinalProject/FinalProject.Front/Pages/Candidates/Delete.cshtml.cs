@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace FinalProject.Front.Pages.Candidates
 {
+
 	[Authorize(Roles = "admin")]
 	public class DeleteModel : PageModel
 	{
