@@ -21,9 +21,17 @@
                     <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                         <ul class="navbar-nav flex-grow-1">
 
-                        @if (User.IsInRole("qualityAssurance"))
+                        @if  (User.IsInRole("admin"))
                         {
-                            <partial name="_QualityAssurancePartial" /> 
+                            <partial name="_AdminPartial" />
+                        }
+                        else if(User.IsInRole("qualityAssurance"))
+                        {
+                            <partial name="_QualityAssurancePartial" />
+                        }
+                        else if (User.IsInRole("marker"))
+                        {
+                            <partial name="_MarkerPartial" />
                         }
                         else
                         {

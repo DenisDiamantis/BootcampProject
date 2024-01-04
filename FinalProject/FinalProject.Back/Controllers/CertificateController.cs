@@ -19,7 +19,7 @@ namespace FinalProject.Back.Controllers
         }
 
         [HttpGet]
-        [Authorize(Roles = "admin")]
+
         public async Task<ActionResult<IEnumerable<CertificateViewDto>>> GetAllCertificates()
         {
             var result = await _context.Certificates
@@ -56,8 +56,8 @@ namespace FinalProject.Back.Controllers
 
         }
 
-		[HttpPut("{id}")]
-		[Authorize(Roles = "admin")]
+        [HttpPut("{id}")]
+        [Authorize(Roles = "admin")]
         public async Task<ActionResult<CertificateViewDto>> UpdateCertificate(int id, CertificateCreateDto certificateDto)
         {
             var certificate = await _context.Certificates.FirstOrDefaultAsync(x => x.Id == id);
