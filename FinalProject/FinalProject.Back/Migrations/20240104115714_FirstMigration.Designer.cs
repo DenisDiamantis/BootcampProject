@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace FinalProject.Back.Migrations
 {
     [DbContext(typeof(CertificationDbContext))]
-    [Migration("20231228123304_add_users")]
-    partial class add_users
+    [Migration("20240104115714_FirstMigration")]
+    partial class FirstMigration
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -24,6 +24,30 @@ namespace FinalProject.Back.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
+
+            modelBuilder.Entity("FinalProject.Data.Entities.Candidate", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("BirthDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("Number")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Candidates");
+                });
 
             modelBuilder.Entity("FinalProject.Data.Entities.Certificate", b =>
                 {
@@ -103,6 +127,48 @@ namespace FinalProject.Back.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Users");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Address = "Nea Smirni",
+                            CreatedAt = new DateTime(2024, 1, 4, 13, 57, 14, 104, DateTimeKind.Local).AddTicks(7891),
+                            Email = "neilos@neko.com",
+                            FirstName = "Neilos",
+                            LastName = "Kotsiopoulos",
+                            Password = "AQAAAAIAAYagAAAAEPyPqDdsy1Dm0/9ha5foebLh3wvlwuycOtrqQVXdq66uW14eYgIKOaypZHfkANnKCQ==",
+                            Phone = "123",
+                            Role = "admin"
+                        });
+                });
+
+            modelBuilder.Entity("FinalProject.Data.Entities.UserCertificate", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("UserCertificates");
+                });
+
+            modelBuilder.Entity("FinalProject.Data.Entities.Candidate", b =>
+                {
+                    b.HasOne("FinalProject.Data.Entities.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
                 });
 #pragma warning restore 612, 618
         }

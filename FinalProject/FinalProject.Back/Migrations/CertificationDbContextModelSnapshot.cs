@@ -54,6 +54,17 @@ namespace FinalProject.Back.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<double>("Cost")
+                        .HasColumnType("float");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Photo")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("Title")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -61,18 +72,6 @@ namespace FinalProject.Back.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Certificates");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            Title = "Microsoft Certified: Azure Fundamentals"
-                        },
-                        new
-                        {
-                            Id = 2,
-                            Title = "Microsoft Certified: Azure Administrator Associate"
-                        });
                 });
 
             modelBuilder.Entity("FinalProject.Data.Entities.User", b =>
@@ -130,7 +129,7 @@ namespace FinalProject.Back.Migrations
                         {
                             Id = 1,
                             Address = "Nea Smirni",
-                            CreatedAt = new DateTime(2024, 1, 2, 13, 55, 24, 429, DateTimeKind.Local).AddTicks(3309),
+                            CreatedAt = new DateTime(2024, 1, 4, 15, 34, 25, 156, DateTimeKind.Local).AddTicks(5674),
                             Email = "neilos@neko.com",
                             FirstName = "Neilos",
                             LastName = "Kotsiopoulos",
@@ -140,6 +139,52 @@ namespace FinalProject.Back.Migrations
                         });
                 });
 
+            modelBuilder.Entity("FinalProject.Data.Entities.UserCertificate", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("CertificateId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("Created")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Grade")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Photo")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CertificateId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("UserCertificates");
+                });
+
             modelBuilder.Entity("FinalProject.Data.Entities.Candidate", b =>
                 {
                     b.HasOne("FinalProject.Data.Entities.User", "User")
@@ -147,6 +192,25 @@ namespace FinalProject.Back.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("FinalProject.Data.Entities.UserCertificate", b =>
+                {
+                    b.HasOne("FinalProject.Data.Entities.Certificate", "Certificate")
+                        .WithMany()
+                        .HasForeignKey("CertificateId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("FinalProject.Data.Entities.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Certificate");
 
                     b.Navigation("User");
                 });
