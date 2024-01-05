@@ -4,6 +4,7 @@ using FinalProject.Data.Entities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Hosting;
 using System;
 using System.Runtime.CompilerServices;
 
@@ -71,6 +72,9 @@ namespace FinalProject.Back.Controllers
             }
 
             certificate.Title = certificateDto.Title;
+            certificate.Description = certificateDto.Description;
+            certificate.Cost = certificateDto.Cost;
+            certificate.Photo = certificateDto.Photo;
 
             await _context.SaveChangesAsync();
 
