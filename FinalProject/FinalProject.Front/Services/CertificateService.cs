@@ -76,18 +76,5 @@ namespace FinalProject.Front.Services
 			var response = await _httpClient.DeleteAsync($"{_apiBaseUrl}/{id}");
 			response.EnsureSuccessStatusCode();
 		}
-
-		public async Task<UserCertificateViewDto> CreateUserCertificateAsync(UserCertificateViewDto userCertificateViewDto)
-		{
-			var content = new StringContent(JsonSerializer.Serialize(userCertificateViewDto), Encoding.UTF8, "application/json");
-			var response = await _httpClient.PostAsync($"{_apiBaseUrl}", content);
-			response.EnsureSuccessStatusCode();
-			using var responseContent = await response.Content.ReadAsStreamAsync();
-			var result = await JsonSerializer.DeserializeAsync<UserCertificateViewDto>(responseContent,
-															 new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
-			return result;
-		}
-
-
 	}
 }

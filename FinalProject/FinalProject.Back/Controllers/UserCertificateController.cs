@@ -26,12 +26,12 @@ namespace FinalProject.Back.Controllers
 
 		//UserCertificate CRUD
 
-		[HttpPost("{certificateId}")]
+		[HttpPost()]
 		[Authorize(Roles = "admin")]
-		public async Task<ActionResult<AsyncVoidMethodBuilder>> CreateUserCertificate(int certificateId)
+		public async Task<ActionResult<AsyncVoidMethodBuilder>> CreateUserCertificate(UserCertificateCreateDto createDto)
 		{
 			var userIdClaim = User.Claims.FirstOrDefault(c => c.Type == "id");
-			var certificate = await _context.Certificates.FirstOrDefaultAsync(ce => ce.Id == certificateId);
+			var certificate = await _context.Certificates.FirstOrDefaultAsync(ce => ce.Id == createDto.Id);
 			int userId = Int32.Parse(userIdClaim?.Value);
 			var user = _context.Users.FirstOrDefault(u => u.Id == userId);
 

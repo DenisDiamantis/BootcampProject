@@ -17,6 +17,19 @@
 				<input asp-for="Certificate.Title" class="form-control" />
 				<span asp-validation-for="Certificate.Title" class="text-danger"></span>
 			</div>
+			<div class="form-group">
+				<label asp-for="Certificate.Description" class="control-label"></label>
+				<input asp-for="Certificate.Description" class="form-control" />
+				<span asp-validation-for="Certificate.Description" class="text-danger"></span>
+			</div>
+			<div class="form-group">
+				<label asp-for="Certificate.Cost" class="control-label"></label>
+				<input asp-for="Certificate.Cost" class="form-control" />
+				<span asp-validation-for="Certificate.Cost" class="text-danger"></span>
+			</div>
+			<label asp-for="Certificate.Photo" class="control-label"></label>
+			<input asp-for="Certificate.Photo" class="form-control" />
+			<span asp-validation-for="Certificate.Photo" class="text-danger"></span>
 			
 			<div class="form-group">
 				<input type="submit" value="Create" class="btn btn-primary" />
