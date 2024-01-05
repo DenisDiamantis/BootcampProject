@@ -1,6 +1,7 @@
 ﻿using FinalProject.Back.Contexts;
 using FinalProject.Data.Dtos;
 using FinalProject.Data.Entities;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -63,6 +64,7 @@ namespace FinalProject.Back.Controllers
 
         // create candidate
         [HttpPost]
+        //[Authorize(Roles = "admin,candidate")]
         public async Task<ActionResult<CandidateDto>> CreateCandidate(CandidateDto candidateDto)
         {
             if (!ModelState.IsValid)

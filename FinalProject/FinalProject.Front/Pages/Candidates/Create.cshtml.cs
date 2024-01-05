@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace FinalProject.Front.Pages.Candidates
 {
-	[Authorize(Roles = "admin")]
+	//[Authorize(Roles = "admin,candidate")]
 
 
 	public class CreateModel : PageModel
@@ -28,7 +28,21 @@ namespace FinalProject.Front.Pages.Candidates
 				return Page();
 			}
 			await _candidateService.CreateCandidateAsync(Candidate);
-			return RedirectToPage("/Candidates/Index");
+			//if user is not logged in, redirect to login else redirect to index
+			if (User.Identity.IsAuthenticated)
+			{
+				return RedirectToPage("/Candidates/Index");
+			}
+			else
+			{
+				return RedirectToPage("/Account/Login");
+			}
+
+
+
+			//if user is logged in as admin, redirect to index
+			//return RedirectToPage("/Candidates/Index");
+
 		}
 	}
 }
