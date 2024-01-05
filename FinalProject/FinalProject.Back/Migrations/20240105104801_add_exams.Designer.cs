@@ -4,6 +4,7 @@ using FinalProject.Back.Contexts;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace FinalProject.Back.Migrations
 {
     [DbContext(typeof(CertificationDbContext))]
-    partial class CertificationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240105104801_add_exams")]
+    partial class add_exams
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -156,12 +159,6 @@ namespace FinalProject.Back.Migrations
                     b.Property<int>("CandidateId")
                         .HasColumnType("int");
 
-                    b.Property<int>("CertificateId")
-                        .HasColumnType("int");
-
-                    b.Property<bool>("Passed")
-                        .HasColumnType("bit");
-
                     b.Property<int>("Score")
                         .HasColumnType("int");
 
@@ -177,9 +174,6 @@ namespace FinalProject.Back.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("CertificateId")
-                        .HasColumnType("int");
 
                     b.Property<string>("Text")
                         .IsRequired()
@@ -245,7 +239,7 @@ namespace FinalProject.Back.Migrations
                         {
                             Id = 1,
                             Address = "Nea Smirni",
-                            CreatedAt = new DateTime(2024, 1, 5, 17, 10, 8, 416, DateTimeKind.Local).AddTicks(6492),
+                            CreatedAt = new DateTime(2024, 1, 5, 12, 48, 1, 655, DateTimeKind.Local).AddTicks(1218),
                             Email = "neilos@neko.com",
                             FirstName = "Neilos",
                             LastName = "Kotsiopoulos",
