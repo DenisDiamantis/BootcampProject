@@ -22,21 +22,6 @@ namespace FinalProject.Back.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("CertificateUser", b =>
-                {
-                    b.Property<int>("CertificatesId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("UsersId")
-                        .HasColumnType("int");
-
-                    b.HasKey("CertificatesId", "UsersId");
-
-                    b.HasIndex("UsersId");
-
-                    b.ToTable("CertificateUser");
-                });
-
             modelBuilder.Entity("FinalProject.Data.Entities.Candidate", b =>
                 {
                     b.Property<int>("Id")
@@ -87,106 +72,6 @@ namespace FinalProject.Back.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Certificates");
-                });
-
-            modelBuilder.Entity("FinalProject.Data.Entities.Exam.CandidateAnswer", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("ExamAnswerId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("ExamAttemptId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("ExamQuestionId")
-                        .HasColumnType("int");
-
-                    b.Property<bool>("IsSelected")
-                        .HasColumnType("bit");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ExamAttemptId");
-
-                    b.ToTable("CandidateAnswer");
-                });
-
-            modelBuilder.Entity("FinalProject.Data.Entities.Exam.ExamAnswer", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("ExamQuestionId")
-                        .HasColumnType("int");
-
-                    b.Property<bool>("IsCorrect")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("Text")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ExamQuestionId");
-
-                    b.ToTable("ExamAnswers");
-                });
-
-            modelBuilder.Entity("FinalProject.Data.Entities.Exam.ExamAttempt", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<DateTime>("AttemptDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("CandidateId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("CertificateId")
-                        .HasColumnType("int");
-
-                    b.Property<bool>("Passed")
-                        .HasColumnType("bit");
-
-                    b.Property<int>("Score")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("ExamAttempts");
-                });
-
-            modelBuilder.Entity("FinalProject.Data.Entities.Exam.ExamQuestion", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("CertificateId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Text")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("ExamQuestions");
                 });
 
             modelBuilder.Entity("FinalProject.Data.Entities.User", b =>
@@ -298,19 +183,6 @@ namespace FinalProject.Back.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("UserCertificates");
-            modelBuilder.Entity("CertificateUser", b =>
-                {
-                    b.HasOne("FinalProject.Data.Entities.Certificate", null)
-                        .WithMany()
-                        .HasForeignKey("CertificatesId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("FinalProject.Data.Entities.User", null)
-                        .WithMany()
-                        .HasForeignKey("UsersId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
                 });
 
             modelBuilder.Entity("FinalProject.Data.Entities.Candidate", b =>
@@ -341,34 +213,6 @@ namespace FinalProject.Back.Migrations
                     b.Navigation("Certificate");
 
                     b.Navigation("User");
-            modelBuilder.Entity("FinalProject.Data.Entities.Exam.CandidateAnswer", b =>
-                {
-                    b.HasOne("FinalProject.Data.Entities.Exam.ExamAttempt", null)
-                        .WithMany("CandidateAnswers")
-                        .HasForeignKey("ExamAttemptId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("FinalProject.Data.Entities.Exam.ExamAnswer", b =>
-                {
-                    b.HasOne("FinalProject.Data.Entities.Exam.ExamQuestion", "Question")
-                        .WithMany("Answers")
-                        .HasForeignKey("ExamQuestionId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Question");
-                });
-
-            modelBuilder.Entity("FinalProject.Data.Entities.Exam.ExamAttempt", b =>
-                {
-                    b.Navigation("CandidateAnswers");
-                });
-
-            modelBuilder.Entity("FinalProject.Data.Entities.Exam.ExamQuestion", b =>
-                {
-                    b.Navigation("Answers");
                 });
 #pragma warning restore 612, 618
         }

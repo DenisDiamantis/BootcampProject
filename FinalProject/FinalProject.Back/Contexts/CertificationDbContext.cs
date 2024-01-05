@@ -1,6 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using FinalProject.Data.Entities;
-using FinalProject.Data.Entities.Exam;
 
 namespace FinalProject.Back.Contexts
 {
@@ -40,18 +39,5 @@ namespace FinalProject.Back.Contexts
         public DbSet<Candidate> Candidates { get; set; }
 
 		public DbSet<UserCertificate> UserCertificates { get; set; }
-        public DbSet<CandidateAnswer> CandidateAnswer { get; set; }
-
-        public DbSet<ExamAttempt> ExamAttempts { get; set; }
-
-        public DbSet<ExamQuestion> ExamQuestions { get; set; }
-
-        public DbSet<ExamAnswer> ExamAnswers { get; set; }
-
-
-
-
-
-      
-    }
+	}
 }

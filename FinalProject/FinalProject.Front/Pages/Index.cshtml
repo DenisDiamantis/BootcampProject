@@ -8,14 +8,11 @@
 <div class="text-center">
     <h1 class="display-4">Welcome</h1>
     <p>Certify your future</p>
-    <img src="/finalFrontImage.png" class="img-fluid rounded-circle" style="max-width: 300px; height: auto;" />
 </div>
 
-@* dummy code to display claims *@
-
-@* @{
+@{
     foreach (var claim in User.Claims)
     {
         <p>@claim.Type: @claim.Value</p>
     }
-} *@
+}
