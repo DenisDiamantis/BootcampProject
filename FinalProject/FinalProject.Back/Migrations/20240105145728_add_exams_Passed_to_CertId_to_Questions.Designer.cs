@@ -4,6 +4,7 @@ using FinalProject.Back.Contexts;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace FinalProject.Back.Migrations
 {
     [DbContext(typeof(CertificationDbContext))]
-    partial class CertificationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240105145728_add_exams_Passed_to_CertId_to_Questions")]
+    partial class add_exams_Passed_to_CertId_to_Questions
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -69,17 +72,6 @@ namespace FinalProject.Back.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<double>("Cost")
-                        .HasColumnType("float");
-
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Photo")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("Title")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -87,6 +79,18 @@ namespace FinalProject.Back.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Certificates");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Title = "Microsoft Certified: Azure Fundamentals"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Title = "Microsoft Certified: Azure Administrator Associate"
+                        });
                 });
 
             modelBuilder.Entity("FinalProject.Data.Entities.Exam.CandidateAnswer", b =>
@@ -153,9 +157,6 @@ namespace FinalProject.Back.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<int>("CandidateId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("CertificateId")
                         .HasColumnType("int");
 
                     b.Property<bool>("Passed")
@@ -244,7 +245,7 @@ namespace FinalProject.Back.Migrations
                         {
                             Id = 1,
                             Address = "Nea Smirni",
-                            CreatedAt = new DateTime(2024, 1, 4, 15, 34, 25, 156, DateTimeKind.Local).AddTicks(5674),
+                            CreatedAt = new DateTime(2024, 1, 5, 16, 57, 28, 304, DateTimeKind.Local).AddTicks(8902),
                             Email = "neilos@neko.com",
                             FirstName = "Neilos",
                             LastName = "Kotsiopoulos",
@@ -254,50 +255,6 @@ namespace FinalProject.Back.Migrations
                         });
                 });
 
-            modelBuilder.Entity("FinalProject.Data.Entities.UserCertificate", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("CertificateId")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("Created")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Grade")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Photo")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Status")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Title")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("UserId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("CertificateId");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("UserCertificates");
             modelBuilder.Entity("CertificateUser", b =>
                 {
                     b.HasOne("FinalProject.Data.Entities.Certificate", null)
@@ -324,23 +281,6 @@ namespace FinalProject.Back.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("FinalProject.Data.Entities.UserCertificate", b =>
-                {
-                    b.HasOne("FinalProject.Data.Entities.Certificate", "Certificate")
-                        .WithMany()
-                        .HasForeignKey("CertificateId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("FinalProject.Data.Entities.User", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Certificate");
-
-                    b.Navigation("User");
             modelBuilder.Entity("FinalProject.Data.Entities.Exam.CandidateAnswer", b =>
                 {
                     b.HasOne("FinalProject.Data.Entities.Exam.ExamAttempt", null)
