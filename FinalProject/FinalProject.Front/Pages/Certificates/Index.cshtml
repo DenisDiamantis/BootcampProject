@@ -26,6 +26,7 @@
 				<td>
 
 					<a asp-page="./Details" asp-route-id="@certificate.Id">Details</a>
+					<a asp-page="./Buy" asp-route-id="@certificate.Id">Buy</a>
 					@if (User.IsInRole("admin"))
 					{
 						<a asp-page="./Edit" asp-route-id="@certificate.Id"> | Edit |</a>

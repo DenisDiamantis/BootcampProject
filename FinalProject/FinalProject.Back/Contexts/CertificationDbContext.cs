@@ -25,16 +25,21 @@ namespace FinalProject.Back.Contexts
                     Password = @"AQAAAAIAAYagAAAAEPyPqDdsy1Dm0/9ha5foebLh3wvlwuycOtrqQVXdq66uW14eYgIKOaypZHfkANnKCQ==",
                     CreatedAt = DateTime.Now }
                 ) ;
-            modelBuilder.Entity<Certificate>().HasData(
-                new Certificate { Id = 1, Title = "Microsoft Certified: Azure Fundamentals" },
-                new Certificate { Id = 2, Title = "Microsoft Certified: Azure Administrator Associate" });
             base.OnModelCreating(modelBuilder);
         }
 
-        public DbSet<Certificate> Certificates { get; set; }
+		public async Task<List<UserCertificate>> GetAllCertificatesByUserIdAsync(int userId)
+		{
+			return await UserCertificates
+				.Where(x => x.User.Id == userId)
+				.ToListAsync();
+		}
+
+		public DbSet<Certificate> Certificates { get; set; }
         public DbSet<User> Users { get; set; }
         public DbSet<Candidate> Candidates { get; set; }
 
+		public DbSet<UserCertificate> UserCertificates { get; set; }
         public DbSet<CandidateAnswer> CandidateAnswer { get; set; }
 
         public DbSet<ExamAttempt> ExamAttempts { get; set; }

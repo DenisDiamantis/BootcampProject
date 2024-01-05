@@ -25,9 +25,6 @@ namespace FinalProject.Data.Entities
         public string Password { get; set; } = "";
         [MaxLength(100)]
         public string Role { get; set; } = "";
-
         public DateTime CreatedAt { get; set; } = DateTime.Now;
-
-        public List<Certificate> Certificates { get; set; }
     }
 }

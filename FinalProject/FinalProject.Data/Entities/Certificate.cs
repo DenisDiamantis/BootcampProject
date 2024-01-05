@@ -5,16 +5,23 @@ namespace FinalProject.Data.Entities
     public class Certificate
     {
         public int Id { get; set; }
+
         public string Title { get; set; }
 
-        public List<User> Users { get; set; }
+        public string Description { get; set; }
 
+        public double Cost { get; set; }
 
-        public static Certificate ToEntity(CertificateCreateDto certificateCreateDto)
+        public string Photo { get; set; }
+
+	public static Certificate ToEntity(CertificateCreateDto certificateCreateDto)
         {
             return new Certificate
             {
-                Title = certificateCreateDto.Title
+                Title = certificateCreateDto.Title,
+                Description = certificateCreateDto.Description,
+                Cost = certificateCreateDto.Cost,
+                Photo = certificateCreateDto.Photo,
             };
         }
     }

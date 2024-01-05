@@ -4,8 +4,12 @@ using FinalProject.Data.Entities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System;
+using System.Runtime.CompilerServices;
 
 namespace FinalProject.Back.Controllers
+
+    // Certificate CRUID
 {
     [Route("api/[controller]")]
     [ApiController]
@@ -19,7 +23,6 @@ namespace FinalProject.Back.Controllers
         }
 
         [HttpGet]
-
         public async Task<ActionResult<IEnumerable<CertificateViewDto>>> GetAllCertificates()
         {
             var result = await _context.Certificates
@@ -92,5 +95,6 @@ namespace FinalProject.Back.Controllers
             return Ok(CertificateViewDto.FromEntity(certificate));
         }
 
-    }
+
+	}
 }

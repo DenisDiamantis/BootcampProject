@@ -22,6 +22,11 @@ builder.Services.AddHttpClient<CertificateService>(client =>
 	client.BaseAddress = new Uri("https://localhost:7193");
 });
 
+builder.Services.AddHttpClient<UserCertificateService>(client =>
+{
+	client.BaseAddress = new Uri("https://localhost:7193");
+});
+
 builder.Services.AddSingleton<IContextHelper, ContextHelper>();
 
 builder.Services.AddAuthentication("CookieAuthentication")

@@ -257,7 +257,7 @@ namespace FinalProject.Back.Controllers
         {
             List<Claim> claims = new List<Claim>()
             {
-                new Claim("id", ""+user.Id),
+                new Claim("id", "" + user.Id),
                 new Claim("role", user.Role)
             };
             string strKey = configuration["JwtSettings:Key"];
