@@ -1,0 +1,62 @@
+﻿@page
+@model FinalProject.Front.Pages.Markers.DetailsModel
+@{
+	ViewData["Title"] = "Details";
+}
+
+<h1>Marker Details</h1>
+
+<div>
+	<h4>
+		@Html.DisplayFor(model => model.Marker.FirstName)
+		@Html.DisplayFor(model => model.Marker.LastName)
+	</h4>
+	<hr />
+	<dl class="row">
+		<dt class="col-sm-2">
+			@Html.DisplayNameFor(model => model.Marker.FirstName)
+		</dt>
+		<dd class="col-sm-10">
+			@Html.DisplayFor(model => model.Marker.FirstName)
+		</dd>
+		<dt class="col-sm-2">
+			@Html.DisplayNameFor(model => model.Marker.LastName)
+		</dt>
+		<dd class="col-sm-10">
+			@Html.DisplayFor(model => model.Marker.LastName)
+		</dd>
+		<dt class="col-sm-2">
+			@Html.DisplayNameFor(model => model.Marker.Email)
+		</dt>
+		<dd class="col-sm-10">
+			@Html.DisplayFor(model => model.Marker.Email)
+		</dd>
+		<dt class="col-sm-2">
+			@Html.DisplayNameFor(model => model.Marker.Address)
+		</dt>
+		<dd class="col-sm-10">
+			@Html.DisplayFor(model => model.Marker.Address)
+		</dd>
+		<dt class="col-sm-2">
+			@Html.DisplayNameFor(model => model.Marker.Phone)
+		</dt>
+		<dd class="col-sm-10">
+			@Html.DisplayFor(model => model.Marker.Phone)
+		</dd>
+		<dt class="col-sm-2">
+			@Html.DisplayNameFor(model => model.Marker.BirthDate)
+		</dt>
+		<dd class="col-sm-10">
+			@Html.DisplayFor(model => model.Marker.BirthDate)
+		</dd>
+</dl>
+</div>
+<p>	@if (User.IsInRole("admin")){
+		<a class="btn btn-primary" asp-page="./Edit" asp-route-id="@Model.Marker.Id">Edit</a>
+	}
+	<a class="btn btn-primary"  asp-page="./Index">Back to List</a>
+		
+</p>
+
+
+

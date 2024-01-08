@@ -48,6 +48,7 @@ namespace FinalProject.Back.Contexts
 
         public DbSet<ExamAnswer> ExamAnswers { get; set; }
 
+        public DbSet<Marker> Markers { get; set; }
 
 
 

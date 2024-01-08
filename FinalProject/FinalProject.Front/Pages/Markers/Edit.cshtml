@@ -1,0 +1,58 @@
+﻿@page
+@model FinalProject.Front.Pages.Markers.EditModel
+@{
+	ViewData["Title"] = "Edit";
+}
+
+<h1>Edit Marker Profile</h1>
+
+<h4>Marker</h4>
+<hr />
+<div class="row">
+	<div class="col-md-4">
+		<form method="post">
+			<div asp-validation-summary="ModelOnly" class="text-danger"></div>
+			<input type="hidden" asp-for="Marker.Id" />
+			<div class="form-group">
+				<label asp-for="Marker.FirstName" class="control-label"></label>
+				<input asp-for="Marker.FirstName" class="form-control" />
+				<span asp-validation-for="Marker.FirstName" class="text-danger"></span>
+			</div>
+			<div class="form-group">
+				<label asp-for="Marker.LastName" class="control-label"></label>
+				<input asp-for="Marker.LastName" class="form-control" />
+				<span asp-validation-for="Marker.LastName" class="text-danger"></span>
+			</div>
+			<div class="form-group">
+				<label asp-for="Marker.Email" class="control-label"></label>
+				<input asp-for="Marker.Email" class="form-control" />
+				<span asp-validation-for="Marker.Email" class="text-danger"></span>
+			</div>
+			<div class="form-group">
+				<label asp-for="Marker.Password" class="control-label"></label>
+				<input asp-for="Marker.Password" class="form-control" />
+				<span asp-validation-for="Marker.Password" class="text-danger"></span>
+			</div>
+			<div class="form-group">
+				<label asp-for="Marker.Address" class="control-label"></label>
+				<input asp-for="Marker.Address" class="form-control" />
+				<span asp-validation-for="Marker.Address" class="text-danger"></span>
+			</div>
+			<div class="form-group">
+				<label asp-for="Marker.Phone" class="control-label"></label>
+				<input asp-for="Marker.Phone" class="form-control" />
+				<span asp-validation-for="Marker.Phone" class="text-danger"></span>
+			</div>
+			<div class="form-group">
+				<label asp-for="Marker.BirthDate" class="control-label"></label>
+				<input asp-for="Marker.BirthDate" class="form-control" />
+				<span asp-validation-for="Marker.BirthDate" class="text-danger"></span>
+			</div>
+			<div class="form-group">
+				<input type="submit" value="Save" class="btn btn-primary" />
+				<a class="btn btn-primary" asp-page="./Index">Back to List</a>
+			</div>
+		</form>
+	</div>
+</div>
+
