@@ -15,6 +15,10 @@
                 {
                     <li><a class="dropdown-item" asp-page="/Account/Details">Profile</a></li>
                 }
+                else if (User.IsInRole("marker"))
+                {
+                    <li><a class="dropdown-item" asp-page="/Account/Details">Profile</a></li>
+                }
                 <li><hr class="dropdown-divider"></li>
                 <li><a class="dropdown-item"  asp-page="/Account/Logout">Logout</a></li>
             </ul>
