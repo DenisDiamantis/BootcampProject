@@ -1,5 +1,6 @@
 using FinalProject.Data.Dtos.CertificateDtos;
 using FinalProject.Front.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
@@ -7,6 +8,7 @@ using System.Threading.Tasks;
 
 namespace FinalProject.Front.Pages.Certificates
 {
+    [Authorize(Roles = "admin,qualityAssurance")]
     public class BuyModel : PageModel
     {
         private readonly UserCertificateService _context;
