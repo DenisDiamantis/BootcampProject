@@ -1,3 +1,4 @@
+using FinalProject.Data.Services;
 using FinalProject.Front.Helpers;
 using FinalProject.Front.Services;
 
@@ -28,6 +29,7 @@ builder.Services.AddHttpClient<UserCertificateService>(client =>
 });
 
 builder.Services.AddSingleton<IContextHelper, ContextHelper>();
+builder.Services.AddScoped<IFileStorageService, LocalFileStorageService>();
 
 builder.Services.AddAuthentication("CookieAuthentication")
 		.AddCookie("CookieAuthentication", options =>
