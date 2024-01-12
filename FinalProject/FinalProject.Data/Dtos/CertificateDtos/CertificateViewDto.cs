@@ -10,10 +10,12 @@ namespace FinalProject.Data.Dtos.CertificateDtos
 
 		public double Cost { get; set; }
 
-		public string Photo { get; set; }
+        public string ImageUrl { get; set; }
 
 
-		public static CertificateViewDto FromEntity(Certificate certificate)
+
+
+        public static CertificateViewDto FromEntity(Certificate certificate)
         {
             return new CertificateViewDto
             {
@@ -21,8 +23,8 @@ namespace FinalProject.Data.Dtos.CertificateDtos
                 Title = certificate.Title,
 				Description = certificate.Description,
 				Cost = certificate.Cost,
-				Photo = certificate.Photo,
-			};
+                ImageUrl = certificate.ImageUrl,
+    };
         }
     }
 }

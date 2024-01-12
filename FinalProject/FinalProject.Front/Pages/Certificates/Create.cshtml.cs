@@ -1,38 +1,64 @@
 ﻿using FinalProject.Data.Dtos.CertificateDtos;
+using FinalProject.Data.Entities;
+using FinalProject.Data.Services;
 using FinalProject.Front.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace FinalProject.Front.Pages.Certificates
 {
-	public class CreateModel : PageModel
-	{
-		private readonly CertificateService _context;
+    public class CreateModel : PageModel
+    {
+        private readonly CertificateService _context;
+        private readonly IFileStorageService _fileStorageService;
 
-		public CreateModel(CertificateService context)
-		{
-			_context = context;
-		}
+        [BindProperty]
+        public IFormFile UploadedImage { get; set; }
 
-		public IActionResult OnGet()
-		{
-			return Page();
-		}
+        [BindProperty]
+        public CertificateCreateDto CertificateCreateDto { get; set; }
 
-		[BindProperty]
-		public CertificateViewDto Certificate { get; set; }
 
-		// To protect from overposting attacks, see https://aka.ms/RazorPagesCRUD
-		public async Task<IActionResult> OnPostAsync()
-		{
-			if (!ModelState.IsValid)
-			{
-				return Page();
-			}
+        public CreateModel(CertificateService context, IFileStorageService fileStorageService)
+        {
+            _context = context;
+            _fileStorageService = fileStorageService;
+        }
 
-			await _context.CreateCertificateAsync(Certificate);
+        public string ErrorMessage { get; private set; }
 
-			return RedirectToPage("/Certificates/Index");
-		}
-	}
+        public async Task<IActionResult> OnPostAsync()
+        {
+            if (!ModelState.IsValid)
+            {
+                return Page();
+            }
+
+            try
+            {
+                // Save the uploaded file and get the file path
+                string imagePath = _fileStorageService.SaveFile(UploadedImage);
+
+                // Create a Certificate entity using the CertificateCreateDto and file path
+                CertificateCreateDto certificate = new CertificateCreateDto
+                {
+                    Title = CertificateCreateDto.Title,
+                    Description = CertificateCreateDto.Description,
+                    Cost = CertificateCreateDto.Cost,
+                    UploadedImage = UploadedImage,
+                };
+
+                // Save the certificate entity to your database or perform any necessary actions
+                await _context.CreateCertificateAsync(certificate);
+
+                return RedirectToPage("/Certificates/Index");
+            }
+            catch (Exception ex)
+            {
+                // Log the error or handle it appropriately
+                ErrorMessage = "An error occurred while processing your request.";
+                return Page();
+            }
+        }
+    }
 }
