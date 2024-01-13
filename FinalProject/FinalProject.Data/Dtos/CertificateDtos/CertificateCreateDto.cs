@@ -1,6 +1,4 @@
-﻿using Microsoft.AspNetCore.Http;
-
-namespace FinalProject.Data.Dtos.CertificateDtos
+﻿namespace FinalProject.Data.Dtos.CertificateDtos
 {
     public class CertificateCreateDto
     {
@@ -9,6 +7,6 @@ namespace FinalProject.Data.Dtos.CertificateDtos
 
 		public double Cost { get; set; }
 
-		public IFormFile UploadedImage { get; set; }
+		public string Photo { get; set; }
 	}
 }

@@ -10,7 +10,7 @@ namespace FinalProject.Data.Entities
 
 		public string Description { get; set; }
 
-		public string ImageUrl { get; set; }
+		public string Photo { get; set; }
 
 		public string Grade { get; set; }
 
@@ -29,7 +29,7 @@ namespace FinalProject.Data.Entities
 			{
 				Title = certificate.Title,
 				Description = certificate.Description,
-                ImageUrl = certificate.ImageUrl,
+				Photo = certificate.Photo,
 				Created = DateTime.Now,
 				Status = "Puchased",
 				User = user,

@@ -1,14 +1,12 @@
 ﻿using FinalProject.Back.Contexts;
 using FinalProject.Data.Dtos.CertificateDtos;
 using FinalProject.Data.Entities;
-using FinalProject.Data.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Hosting;
 using System;
 using System.Runtime.CompilerServices;
-using Microsoft.Extensions.Hosting.Internal;
 
 namespace FinalProject.Back.Controllers
 
@@ -19,15 +17,10 @@ namespace FinalProject.Back.Controllers
     public class CertificateController : ControllerBase
     {
         private readonly CertificationDbContext _context;
-        private readonly IFileStorageService _fileStorageService;
-        private readonly IWebHostEnvironment _hostingEnvironment;
 
-        public CertificateController(CertificationDbContext context, IFileStorageService fileStorageService, IWebHostEnvironment hostingEnvironment)
+        public CertificateController(CertificationDbContext context)
         {
-            _hostingEnvironment = hostingEnvironment ?? throw new ArgumentNullException(nameof(hostingEnvironment));
             _context = context;
-            _fileStorageService = fileStorageService;
-
         }
 
         [HttpGet]
@@ -58,8 +51,8 @@ namespace FinalProject.Back.Controllers
         [Authorize(Roles = "admin")]
         public async Task<ActionResult<CertificateCreateDto>> CreateCertificate(CertificateCreateDto certificateDto)
         {
-            var certificate = Certificate.ToEntity(certificateDto, _fileStorageService);
-            Console.WriteLine(certificateDto.UploadedImage);
+            var certificate = Certificate.ToEntity(certificateDto);
+
             _context.Certificates.Add(certificate);
             await _context.SaveChangesAsync();
 
@@ -106,19 +99,6 @@ namespace FinalProject.Back.Controllers
             return Ok(CertificateViewDto.FromEntity(certificate));
         }
 
-        [HttpGet("/image/{imageName}")]
-        public IActionResult GetImage(string imageName)
-        {
-            var imagePath = Path.Combine(_hostingEnvironment.WebRootPath, "uploads", imageName);
 
-            if (System.IO.File.Exists(imagePath))
-            {
-                var imageBytes = System.IO.File.ReadAllBytes(imagePath);
-                return File(imageBytes, "image/jpg"); 
-            }
-
-            return NotFound();
-        }
-
-    }
+	}
 }
