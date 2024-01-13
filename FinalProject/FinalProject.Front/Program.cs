@@ -21,6 +21,10 @@ builder.Services.AddHttpClient<CertificateService>(client =>
 {
 	client.BaseAddress = new Uri("https://localhost:7193");
 });
+builder.Services.AddHttpClient<ExamService>(client =>
+{
+	client.BaseAddress = new Uri("https://localhost:7193");
+});
 
 builder.Services.AddHttpClient<UserCertificateService>(client =>
 {
@@ -57,7 +61,5 @@ app.UseAuthorization();
 
 
 app.MapRazorPages();
-
-app.MapControllers();
 
 app.Run();

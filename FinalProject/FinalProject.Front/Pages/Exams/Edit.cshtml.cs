@@ -3,13 +3,13 @@ using FinalProject.Front.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
-namespace FinalProject.Front.Pages.Certificates
+namespace FinalProject.Front.Pages.Exams
 {
 	public class EditModel : PageModel
 	{
-		private readonly CertificateService _context;
+		private readonly ExamService _context;
 
-		public EditModel(CertificateService context)
+		public EditModel(ExamService context)
 		{
 			_context = context;
 		}
@@ -24,12 +24,7 @@ namespace FinalProject.Front.Pages.Certificates
 				return NotFound();
 			}
 
-			var certificate = await _context.GetCertificateByIdAsync(id.Value);
-			if (certificate == null)
-			{
-				return NotFound();
-			}
-			Certificate = certificate;
+
 			return Page();
 		}
 

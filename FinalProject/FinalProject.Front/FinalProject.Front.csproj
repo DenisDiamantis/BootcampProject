@@ -14,10 +14,19 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Content Remove="Pages\Exams\Delete.cshtml" />
+    <Content Remove="Pages\Exams\Details.cshtml" />
+    <Content Remove="Pages\Exams\Edit.cshtml" />
+  </ItemGroup>
+
+  <ItemGroup>
     <None Include="Pages\Certificates\Create.cshtml" />
     <None Include="Pages\Certificates\Delete.cshtml" />
     <None Include="Pages\Certificates\Details.cshtml" />
     <None Include="Pages\Certificates\Edit.cshtml" />
+    <None Include="Pages\Exams\Delete.cshtml" />
+    <None Include="Pages\Exams\Details.cshtml" />
+    <None Include="Pages\Exams\Edit.cshtml" />
   </ItemGroup>
 
   <ItemGroup>

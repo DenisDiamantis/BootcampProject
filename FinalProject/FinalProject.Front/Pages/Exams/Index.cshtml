@@ -1,0 +1,52 @@
+﻿@page
+@model FinalProject.Front.Pages.Exams.IndexModel
+@{
+	ViewData["Title"] = "Index";
+}
+
+<h1>Exam Templates</h1>
+
+
+<table class="table">
+	<thead>
+		<tr>
+			<th>Exam Template ID</th>
+			<th>Certificate</th>
+			<th>Number of Questions</th>
+			<th>Minimum correct Answers</th>
+			<th>Exam Date</th>
+		</tr>
+
+	</thead>
+	<tbody>
+		@foreach (var examTemplate in Model.ExamTemplates)
+		{
+			<tr>
+				<td>@examTemplate.Id</td>
+				<td>@Model.Certificates.FirstOrDefault(x=>x.Id==examTemplate.CertificateId)!.Title</td>
+				<td>@examTemplate.MaxScore</td>
+				<td>@examTemplate.MinScore</td>
+				<td>@examTemplate.ExamDate</td>
+
+				<td>
+
+					<a asp-page="./Details" asp-route-id="@examTemplate.Id">Details</a>
+					@if (User.IsInRole("admin"))
+					{
+						<a asp-page="./Edit" asp-route-id="@examTemplate.Id"> | Edit |</a>
+						<a asp-page="./Delete" asp-route-id="@examTemplate.Id">Delete</a>
+					}
+				</td>
+			</tr>
+		}
+	</tbody>
+</table>
+
+<div>
+	@if (User.IsInRole("admin"))
+	{
+		<a class="btn btn-primary" asp-page="./ChooseCertificate">Create New Exam</a>
+	}
+</div>
+
+

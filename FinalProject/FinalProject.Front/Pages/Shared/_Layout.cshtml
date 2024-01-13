@@ -33,6 +33,10 @@
                         {
                             <partial name="_MarkerPartial" />
                         }
+                        else if (User.IsInRole("candidate"))
+                        {
+                            <partial name="_CandidatePartial" />
+                        }
                         else
                         {
                             <partial name="_ClientPartial" />

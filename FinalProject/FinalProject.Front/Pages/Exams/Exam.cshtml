@@ -1,0 +1,85 @@
+﻿@page
+@model FinalProject.Front.Pages.Exams.ExamModel
+@{
+}
+<h2>Attendance</h2>
+
+@using (Html.BeginForm())
+{
+    <div> class="row">
+        <tr class="warning">
+            <td></td>
+            <td>Name</td>
+            <td>Surname</td>
+        </tr>
+        @for (int i = 0; i < Model.Questions.Count; i++)
+        {
+            <tr>
+                <td>
+                    
+                    @Html.DisplayFor(it => Model.Questions[i].QuestionText)
+                    @Html.HiddenFor(it => Model.Questions[i].QuestionText)
+                </td>
+                <td>
+                    @Model.Questions[i].AnswerA
+                    @Html.HiddenFor(it => Model.Questions[i].AnswerA)
+                </td>
+                <td>
+                    @Model.Questions[i].AnswerB
+                    @Html.HiddenFor(it => Model.Questions[i].AnswerB)
+                </td>
+            </tr>
+        }
+
+
+    <div class="form-group">
+        <div class="col-sm-10">
+            <button type="submit" class="btn btn-info">
+                <span class="glyphicon glyphicon-ok"></span>Submit
+            </button>
+        </div>
+    </div>
+
+    </div>
+}
+<div class="row">
+	<div class="col-md-4">
+		<form method="post">
+
+			<div asp-validation-summary="ModelOnly" class="text-danger"></div>
+			@foreach (var Question in Model.Questions)
+			{
+			<div class="form-group">
+				<label asp-for="@Question.QuestionText" class="control-label">@Question.QuestionText</label>
+					<input type="radio" />
+			</div>
+			<div class="form-group">
+				A	<label asp-for="@Question.AnswerA" class="control-label">@Question.AnswerA</label>
+				
+			</div>
+			<div class="form-group">
+					B<label asp-for="@Question.AnswerB" class="control-label">@Question.AnswerB</label>
+			
+			</div>
+			<div class="form-group">
+					C<label asp-for="@Question.AnswerC" class="control-label">@Question.AnswerC</label>
+				
+			</div>
+			<div class="form-group">
+					D<label asp-for="@Question.AnswerD" class="control-label">@Question.AnswerD</label>
+			
+			</div>
+			<div class="form-group">
+				COR<label asp-for="@Question.CorrectAnwser" class="control-label">@Question.CorrectAnwser</label>
+			
+			</div>
+			}
+			<hr />
+
+			<div class="form-group">
+				<input type="Submit" value="Submit" class="btn btn-primary" />
+			</div>
+		</form>
+	</div>
+</div>
+

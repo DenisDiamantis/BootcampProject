@@ -1,7 +1,6 @@
 ﻿using FinalProject.Back.Contexts;
 using FinalProject.Data.Dtos.ExamDtos;
 using FinalProject.Data.Entities.Exam;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -18,188 +17,223 @@ namespace FinalProject.Back.Controllers
             _context = context;
         }
 
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<ExamTemplateDto>>> GetExamTemplates()
+        {
+            var result = await _context.ExamTemplate.Select(x => ExamTemplateDto.FromEntity(x)).ToListAsync();
+            return Ok(result);
+        }
+
         // endpoint to get all the questions for exam
-        [HttpGet("questions")]
-        public async Task<ActionResult<IEnumerable<ExamQuestionDto>>> GetExamQuestions()
+        [HttpGet("GetQuestions/{examTemplateId}")]
+        public async Task<ActionResult<IEnumerable<QuestionDto>>> GetExamTemplateQuestions(int examTemplateId)
         {
-            var result = await _context.ExamQuestions.Include(x => x.Answers)
-                .Select(x => ExamQuestionDto.FromEntity(x))
+            var result = await _context.QuestionTemplate.Where(x => x.ExamTemplateId == examTemplateId)
+                .Select(q => new { q.QuestionText, q.AnswerA, q.AnswerB, q.AnswerC, q.AnswerD, q.CorrectAnwser })
                 .ToListAsync();
-            await _context.SaveChangesAsync();
             return Ok(result);
         }
 
-        // endpoint to add question
-        [HttpPost("questions")]
-        public async Task<ActionResult<ExamQuestionDto>> AddExamQuestion(ExamQuestionDto examQuestionDto)
+        //get exam questions
+        [HttpGet("Exam/{examId}")]
+        public async Task<ActionResult<IEnumerable<QuestionTemplateDto>>> GetExamQuestions(int examId)
         {
-            var result = await _context.ExamQuestions.AddAsync(ExamQuestionDto.ToEntity(examQuestionDto));
-            await _context.SaveChangesAsync();
-            return Ok(ExamQuestionDto.FromEntity(result.Entity));
-        }
-
-
-
-        //list of candidates with their exam results
-        [HttpGet("results")]
-        public async Task<ActionResult<IEnumerable<ExamAttemptDto>>> GetExamResults()
-        {
-            var result = await _context.ExamAttempts.Include(x => x.CandidateAnswers)
-                //.ThenInclude(x => x.Id)
-                .Select(x => ExamAttemptDto.FromEntity(x))
+            var exam = await _context.Exam.FirstOrDefaultAsync(x => x.Id == examId);
+            var result = await _context.QuestionTemplate.Where(x => x.ExamTemplateId == exam.ExamTemplateId)
+                .Select(x => QuestionTemplateDto.FromEntity(x))
                 .ToListAsync();
-            await _context.SaveChangesAsync();
+
             return Ok(result);
         }
 
-
-
-        // endpoint for a candidate to submit their answers
-        [HttpPost("submit")]
-        public async Task<ActionResult<ExamSubmissionResultDto>> SubmitExamAttempt(ExamAttemptDto examAttemptDto)
+        // endpoint to create examTemplate
+        [HttpPost]
+        public async Task<ActionResult<ExamTemplateDto>> CreateExamTemplate(ExamTemplateDto examTemplate)
         {
-
-            if (examAttemptDto.CandidateAnswers == null || !examAttemptDto.CandidateAnswers.Any())
-            {
-                return BadRequest("No answers submitted.");
-            }
-
-            var correctAnswers = await _context.ExamAnswers
-         .Where(answer => answer.IsCorrect)
-         .ToListAsync();
-
-            int score = 0;
-            var candidateAnswerEntities = new List<CandidateAnswer>();
-            foreach (var userAnswer in examAttemptDto.CandidateAnswers)
-            {
-                if (correctAnswers.Any(ca => ca.ExamQuestionId == userAnswer.ExamQuestionId && ca.Id == userAnswer.ExamAnswerId && userAnswer.IsSelected))
-                {
-                    score++;
-                }
-
-                var candidateAnswerEntity = new CandidateAnswer
-                {
-                    ExamAttemptId = examAttemptDto.Id, // Assuming this is set correctly
-                    ExamQuestionId = userAnswer.ExamQuestionId,
-                    ExamAnswerId = userAnswer.ExamAnswerId,
-                    IsSelected = userAnswer.IsSelected
-                };
-                candidateAnswerEntities.Add(candidateAnswerEntity);
-            }
-
-            // Each question is worth 25%, so multiply by 25 to get the total score
-            var percentageScore = score * 25;
-
-            // Determine pass or fail
-            bool passed = percentageScore >= 75;
-
-            // Create and save the exam attempt
-            var examAttempt = new ExamAttempt
-            {
-                CandidateId = examAttemptDto.CandidateId,
-                AttemptDate = DateTime.Now,
-                Score = percentageScore,
-                Passed = passed,
-                CertificateId = examAttemptDto.CertificateId,
-                CandidateAnswers = candidateAnswerEntities
-            };
-            _context.ExamAttempts.Add(examAttempt);
+            var result = await _context.ExamTemplate.AddAsync(ExamTemplate.ToEntity(examTemplate));
             await _context.SaveChangesAsync();
-
-            // Create a result DTO to return
-            var resultDto = new ExamSubmissionResultDto
+            return Ok(ExamTemplateDto.FromEntity(result.Entity));
+        }
+        [HttpPost("createExam/{userId}/{certId}")]
+        public async Task<ActionResult<ExamDto>> CreateExam(int userId, int certId)
+        {
+            var examTemplate = await _context.ExamTemplate.FirstOrDefaultAsync(x => x.CertificateId == certId);
+            var candidate = await _context.Candidates.FirstOrDefaultAsync(x => x.UserId == userId);
+            var examDto = new ExamDto()
             {
-                Score = percentageScore,
-                Passed = passed
+                ExamTemplateId = examTemplate.Id,
+                CertificateId = certId,
+                CandidateNumber = candidate!.Number,
+                ExamDate = examTemplate.ExamDate,
+                Marked = false
             };
 
-            return Ok(resultDto);
+            var result = await _context.Exam.AddAsync(Exam.ToEntity(examDto));
+            await _context.SaveChangesAsync();
+            return Ok(ExamDto.FromEntity(result.Entity));
         }
 
-        // retrieve exam results for a candidate
-        [HttpGet("results/{candidateId}")]
-        public async Task<ActionResult<IEnumerable<ExamAttemptDto>>> GetExamResults(int candidateId)
+        //add questions for exam
+        [HttpPost("AddQuestions")]
+        public async Task<ActionResult<QuestionTemplateDto>> AddQuestion(QuestionTemplateDto question)
         {
-            var result = await _context.ExamAttempts.Include(x => x.CandidateAnswers)
-                .ThenInclude(x => x.ExamAnswerId)
-                .Where(x => x.CandidateId == candidateId)
-                .Select(x => ExamAttemptDto.FromEntity(x))
-                .ToListAsync();
+
+            var result = await _context.QuestionTemplate.AddAsync(QuestionTemplate.ToEntity(question));
             await _context.SaveChangesAsync();
+
+            return Ok(QuestionTemplateDto.FromEntity(result.Entity));
+        }
+
+        //get CandidateExams
+        [HttpGet("{userId}")]
+        public async Task<ActionResult<IEnumerable<ExamDto>>> GetCandidateExams(int userId)
+        {
+            var candidate = await _context.Candidates.FirstOrDefaultAsync(x => x.UserId == userId);
+            var result = await _context.Exam.Where(x => x.CandidateNumber == candidate.Number).Select(x => ExamDto.FromEntity(x)).ToListAsync();
             return Ok(result);
         }
 
-        //retrieve a specific exam result for a candidate
-        [HttpGet("results/{candidateId}/{attemptId}")]
-        public async Task<ActionResult<ExamAttemptDto>> GetExamResult(int candidateId, int attemptId)
-        {
-            var result = await _context.ExamAttempts.Include(x => x.CandidateAnswers)
-                .ThenInclude(x => x.ExamAnswerId)
-                .FirstOrDefaultAsync(x => x.CandidateId == candidateId && x.Id == attemptId);
+        //// endpoint for a candidate to submit their answers
+        //[HttpPost("{examId}")]
+        //public async Task<ActionResult<ExamDto>> SubmitExamAttempt(List<QuestionDto> questions)
+        //{
 
-            if (result == null)
-            {
-                return NotFound();
-            }
-            await _context.SaveChangesAsync();
-            return Ok(ExamAttemptDto.FromEntity(result));
-        }
+        //	var correctAnswers = await _context.ExamAnswers
+        // .Where(answer => answer.IsCorrect)
+        // .ToListAsync();
 
-        //delete an exam question
-        [HttpDelete("questions/{id}")]
-        public async Task<ActionResult<ExamQuestionDto>> DeleteExamQuestion(int id)
-        {
-            var examQuestion = await _context.ExamQuestions.FindAsync(id);
-            if (examQuestion == null)
-            {
-                return NotFound();
-            }
+        //	int score = 0;
+        //	var candidateAnswerEntities = new List<CandidateAnswer>();
+        //	foreach (var userAnswer in examAttemptDto.CandidateAnswers)
+        //	{
+        //		if (correctAnswers.Any(ca => ca.ExamQuestionId == userAnswer.ExamQuestionId && ca.Id == userAnswer.ExamAnswerId && userAnswer.IsSelected))
+        //		{
+        //			score++;
+        //		}
 
-            _context.ExamQuestions.Remove(examQuestion);
-            await _context.SaveChangesAsync();
+        //		var candidateAnswerEntity = new CandidateAnswer
+        //		{
+        //			ExamAttemptId = examAttemptDto.Id, // Assuming this is set correctly
+        //			ExamQuestionId = userAnswer.ExamQuestionId,
+        //			ExamAnswerId = userAnswer.ExamAnswerId,
+        //			IsSelected = userAnswer.IsSelected
+        //		};
+        //		candidateAnswerEntities.Add(candidateAnswerEntity);
+        //	}
 
-            return Ok(ExamQuestionDto.FromEntity(examQuestion));
-        }
+        //	// Each question is worth 25%, so multiply by 25 to get the total score
+        //	var percentageScore = score * 25;
 
-        //update an exam question
-        [HttpPut("questions/{id}")]
-        public async Task<ActionResult<ExamQuestionDto>> UpdateExamQuestion(int id, ExamQuestionDto examQuestionDto)
-        {
-        
+        //	// Determine pass or fail
+        //	bool passed = percentageScore >= 75;
 
-            var examQuestion = await _context.ExamQuestions
-                                    .Include(q => q.Answers)
-                                    .FirstOrDefaultAsync(q => q.Id == id);
+        //	// Create and save the exam attempt
+        //	var examAttempt = new ExamAttempt
+        //	{
+        //		CandidateId = examAttemptDto.CandidateId,
+        //		AttemptDate = DateTime.Now,
+        //		Score = percentageScore,
+        //		Passed = passed,
+        //		CertificateId = examAttemptDto.CertificateId,
+        //		CandidateAnswers = candidateAnswerEntities
+        //	};
+        //	_context.ExamAttempts.Add(examAttempt);
+        //	await _context.SaveChangesAsync();
 
-            if (examQuestion == null)
-            {
-                return NotFound();
-            }
+        //	// Create a result DTO to return
+        //	var resultDto = new ExamSubmissionResultDto
+        //	{
+        //		Score = percentageScore,
+        //		Passed = passed
+        //	};
 
-            examQuestion.Text = examQuestionDto.Text;
+        //	return Ok(resultDto);
+        //}
 
-            // Assuming all updated answers are marked as correct for now
-            var updatedAnswers = examQuestionDto.Answers.Select(ExamAnswerDto.ToEntity).ToList();
-            foreach (var answer in examQuestion.Answers)
-            {
-                var updatedAnswer = updatedAnswers.FirstOrDefault(a => a.Id == answer.Id);
-                if (updatedAnswer != null)
-                {
-                    answer.Text = updatedAnswer.Text;
-                    // Not updating IsCorrect here
-                }
-            }
+        //// retrieve exam results for a candidate
+        //[HttpGet("results/{candidateId}")]
+        //public async Task<ActionResult<IEnumerable<ExamAttemptDto>>> GetExamResults(int candidateId)
+        //{
+        //	var result = await _context.ExamAttempts.Include(x => x.CandidateAnswers)
+        //		.ThenInclude(x => x.ExamAnswerId)
+        //		.Where(x => x.CandidateId == candidateId)
+        //		.Select(x => ExamAttemptDto.FromEntity(x))
+        //		.ToListAsync();
+        //	await _context.SaveChangesAsync();
+        //	return Ok(result);
+        //}
 
-            // Add new answers
-            foreach (var newAnswer in updatedAnswers.Where(a => a.Id == 0))
-            {
-                examQuestion.Answers.Add(newAnswer);
-            }
+        ////retrieve a specific exam result for a candidate
+        //[HttpGet("results/{candidateId}/{attemptId}")]
+        //public async Task<ActionResult<ExamAttemptDto>> GetExamResult(int candidateId, int attemptId)
+        //{
+        //	var result = await _context.ExamAttempts.Include(x => x.CandidateAnswers)
+        //		.ThenInclude(x => x.ExamAnswerId)
+        //		.FirstOrDefaultAsync(x => x.CandidateId == candidateId && x.Id == attemptId);
 
-            await _context.SaveChangesAsync();
+        //	if (result == null)
+        //	{
+        //		return NotFound();
+        //	}
+        //	await _context.SaveChangesAsync();
+        //	return Ok(ExamAttemptDto.FromEntity(result));
+        //}
 
-            return Ok(ExamQuestionDto.FromEntity(examQuestion));
-        }
+        ////delete an exam question
+        //[HttpDelete("questions/{id}")]
+        //public async Task<ActionResult<ExamQuestionDto>> DeleteExamQuestion(int id)
+        //{
+        //	var examQuestion = await _context.ExamQuestions.FindAsync(id);
+        //	if (examQuestion == null)
+        //	{
+        //		return NotFound();
+        //	}
+
+        //	_context.ExamQuestions.Remove(examQuestion);
+        //	await _context.SaveChangesAsync();
+
+        //	return Ok(ExamQuestionDto.FromEntity(examQuestion));
+        //}
+
+        ////update an exam question
+        //[HttpPut("questions/{id}")]
+        //public async Task<ActionResult<ExamQuestionDto>> UpdateExamQuestion(int id, ExamQuestionDto examQuestionDto)
+        //{
+
+
+        //	var examQuestion = await _context.ExamQuestions
+        //							.Include(q => q.Answers)
+        //							.FirstOrDefaultAsync(q => q.Id == id);
+
+        //	if (examQuestion == null)
+        //	{
+        //		return NotFound();
+        //	}
+
+        //	examQuestion.Text = examQuestionDto.Text;
+
+        //	// Assuming all updated answers are marked as correct for now
+        //	var updatedAnswers = examQuestionDto.Answers.Select(ExamAnswerDto.ToEntity).ToList();
+        //	foreach (var answer in examQuestion.Answers)
+        //	{
+        //		var updatedAnswer = updatedAnswers.FirstOrDefault(a => a.Id == answer.Id);
+        //		if (updatedAnswer != null)
+        //		{
+        //			answer.Text = updatedAnswer.Text;
+        //			// Not updating IsCorrect here
+        //		}
+        //	}
+
+        //	// Add new answers
+        //	foreach (var newAnswer in updatedAnswers.Where(a => a.Id == 0))
+        //	{
+        //		examQuestion.Answers.Add(newAnswer);
+        //	}
+
+        //	await _context.SaveChangesAsync();
+
+        //	return Ok(ExamQuestionDto.FromEntity(examQuestion));
+        //}
 
 
 

@@ -1,0 +1,37 @@
+﻿@page
+@model FinalProject.Front.Pages.Exams.CandidateExamModel
+@{
+}
+<h1>Exam Templates</h1>
+
+
+<table class="table">
+	<thead>
+		<tr>
+			<th>Exam ID</th>
+			<th>Certificate</th>
+			<th>Candidate Score</th>
+			<th>Result</th>
+			<th>Marked</th>
+		</tr>
+
+	</thead>
+	<tbody>
+		@foreach (var exam in Model.Exams)
+		{
+			<tr>
+				<td>@exam.Id</td>
+				<td>@Model.Certificates.FirstOrDefault(x => x.Id == exam.CertificateId)!.Title</td>
+				<td>@exam.CandidateScore</td>
+				<td>@exam.Result</td>
+				<td>@exam.Marked</td>
+
+				<td>
+
+					<a asp-page="./Exam" asp-route-id="@exam.Id">Take Exam</a>
+
+				</td>
+			</tr>
+		}
+	</tbody>
+</table>

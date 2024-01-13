@@ -2,12 +2,9 @@
 using FinalProject.Data.Dtos.CertificateDtos;
 using FinalProject.Data.Entities;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Runtime.CompilerServices;
-using System.Runtime.Intrinsics.X86;
-using System.Security.Claims;
 
 namespace FinalProject.Back.Controllers
 {
@@ -32,7 +29,7 @@ namespace FinalProject.Back.Controllers
 		{
 			var userIdClaim = User.Claims.FirstOrDefault(c => c.Type == "id");
 			var certificate = await _context.Certificates.FirstOrDefaultAsync(ce => ce.Id == createDto.Id);
-			int userId = Int32.Parse(userIdClaim?.Value);
+			int userId = Int32.Parse(userIdClaim?.Value!);
 			var user = _context.Users.FirstOrDefault(u => u.Id == userId);
 
 			var userCertificate = UserCertificate.ToEntity(user, certificate);

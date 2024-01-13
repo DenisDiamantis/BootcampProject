@@ -13,7 +13,6 @@ var builder = WebApplication.CreateBuilder(args);
 // add connection string to the configuration
 builder.Services.AddDbContext<CertificationDbContext>(options =>
 	options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
-
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
