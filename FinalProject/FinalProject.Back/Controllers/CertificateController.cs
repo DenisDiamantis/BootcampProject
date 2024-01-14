@@ -81,7 +81,6 @@ namespace FinalProject.Back.Controllers
             certificate.Title = certificateDto.Title;
             certificate.Description = certificateDto.Description;
             certificate.Cost = certificateDto.Cost;
-            certificate.Photo = certificateDto.Photo;
 
             await _context.SaveChangesAsync();
 
