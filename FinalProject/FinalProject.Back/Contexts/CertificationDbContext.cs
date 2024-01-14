@@ -48,7 +48,7 @@ namespace FinalProject.Back.Contexts
 		public DbSet<Exam> Exam { get; set; }
 		public DbSet<QuestionTemplate> QuestionTemplate { get; set; }
 
-		public DbSet<Question> Question { get; set; }
+		public DbSet<Answer> Answer { get; set; }
 
 
 	}
