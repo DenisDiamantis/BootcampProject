@@ -15,7 +15,7 @@ namespace FinalProject.Front.Pages.Certificates
         }
 
         [BindProperty]
-        public CertificateViewDto Certificate { get; set; } = default!;
+        public CertificateUpdateDto Certificate { get; set; } = default;
 
         public async Task<IActionResult> OnGetAsync(int? id)
         {
@@ -29,19 +29,23 @@ namespace FinalProject.Front.Pages.Certificates
             {
                 return NotFound();
             }
-            Certificate = certificate;
+            CertificateUpdateDto certificateUpdate = new CertificateUpdateDto();
+            certificateUpdate.Cost = certificate.Cost;
+            certificateUpdate.Description = certificate.Description;
+            certificateUpdate.Title = certificate.Title;
+            Certificate = certificateUpdate;
             return Page();
         }
 
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see https://aka.ms/RazorPagesCRUD.
-        public async Task<IActionResult> OnPostAsync()
+        public async Task<IActionResult> OnPostAsync(int id)
         {
             if (!ModelState.IsValid)
             {
                 return Page();
             }
-            await _context.UpdateCertificateAsync(Certificate);
+            await _context.UpdateCertificateAsync(Certificate, id);
             return RedirectToPage("/Certificates/Index");
         }
     }

@@ -75,11 +75,11 @@ namespace FinalProject.Front.Services
 		}
 
 		//Update certificate
-		public async Task<CertificateViewDto> UpdateCertificateAsync(CertificateViewDto certificateViewDto)
+		public async Task<CertificateViewDto> UpdateCertificateAsync(CertificateUpdateDto certificateUpdateDto, int id)
 		{
-			var content = new StringContent(JsonSerializer.Serialize(certificateViewDto), Encoding.UTF8, "application/json");
+			var content = new StringContent(JsonSerializer.Serialize(certificateUpdateDto), Encoding.UTF8, "application/json");
 
-			var response = await _httpClient.PutAsync($"{_apiBaseUrl}/{certificateViewDto.Id}", content);
+			var response = await _httpClient.PutAsync($"{_apiBaseUrl}/{id}", content);
 			response.EnsureSuccessStatusCode();
 			using var responseContent = await response.Content.ReadAsStreamAsync();
 			var result = await JsonSerializer.DeserializeAsync<CertificateViewDto>(responseContent,

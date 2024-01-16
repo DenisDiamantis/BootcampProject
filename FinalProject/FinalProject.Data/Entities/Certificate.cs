@@ -2,6 +2,7 @@
 using FinalProject.Data.Services;
 using Microsoft.AspNetCore.Http;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Runtime.CompilerServices;
 
 namespace FinalProject.Data.Entities
 {
@@ -38,5 +39,12 @@ namespace FinalProject.Data.Entities
 				UploadedImage = certificateCreateDto.UploadedImage,
 			};
 		}
-	}
+
+        public void UpdateEntity(CertificateUpdateDto certificateUpdateDto)
+        {
+				this.Title = certificateUpdateDto.Title;
+                this.Description = certificateUpdateDto.Description;
+                this.Cost = certificateUpdateDto.Cost;
+        }
+    }
 }

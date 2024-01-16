@@ -69,7 +69,7 @@ namespace FinalProject.Back.Controllers
 
         [HttpPut("{id}")]
         [Authorize(Roles = "admin")]
-        public async Task<ActionResult<CertificateViewDto>> UpdateCertificate(int id, CertificateCreateDto certificateDto)
+        public async Task<ActionResult<CertificateViewDto>> UpdateCertificate(int id, CertificateUpdateDto certificateDto)
         {
             var certificate = await _context.Certificates.FirstOrDefaultAsync(x => x.Id == id);
 
@@ -78,9 +78,7 @@ namespace FinalProject.Back.Controllers
                 return NotFound();
             }
 
-            certificate.Title = certificateDto.Title;
-            certificate.Description = certificateDto.Description;
-            certificate.Cost = certificateDto.Cost;
+            certificate.UpdateEntity(certificateDto);
 
             await _context.SaveChangesAsync();
 
