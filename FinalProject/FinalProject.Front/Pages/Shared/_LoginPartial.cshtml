@@ -1,33 +1,83 @@
 ﻿
-<ul class="navbar-nav">
-    @if (User.Identity.IsAuthenticated)
-    {
-        <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle text-dark" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                @User.Identity.Name
-            </a>
-            <ul class="dropdown-menu">
-                @if (User.IsInRole("admin"))
-                {
-                    <li><a class="dropdown-item" asp-page="/Account/Details">Admin Profile</a></li>
-                }
-                else if (User.IsInRole("candidate"))
-                {
-                    <li><a class="dropdown-item" asp-page="/Account/Details">Profile</a></li>
-                }
-                <li><hr class="dropdown-divider"></li>
-                <li><a class="dropdown-item"  asp-page="/Account/Logout">Logout</a></li>
-            </ul>
-        </li>
+<style>
+	.navbar-nav {
+		display: flex;
+		align-items: center;
+	}
 
-    }
-    else
-    {
-        <li class="nav-item">
-            <a class="nav-link text-dark" id="register"  asp-page="/Candidates/Create">Register</a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link text-dark" id="login" asp-page="/Account/Login">Login</a>
-        </li>
-    }
+	.nav-link {
+		color: #333; /* Dark text color */
+		font-weight: bold;
+		transition: color 0.3s ease-in-out;
+	}
+
+		.nav-link:hover {
+			color: #007bff; /* Blue color on hover */
+		}
+
+	.dropdown-menu {
+		background-color: #fff; /* White background for dropdown menu */
+		box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Subtle box shadow */
+	}
+
+	.dropdown-item {
+		color: #333; /* Dark text color for dropdown items */
+		transition: color 0.3s ease-in-out;
+	}
+
+		.dropdown-item:hover {
+			color: #007bff; /* Blue color on hover for dropdown items */
+		}
+
+	.text-dark {
+		color: #333 !important; /* Dark text color */
+		font-weight: bold;
+		transition: color 0.3s ease-in-out;
+	}
+
+		.text-dark:hover {
+			color: #007bff !important; /* Blue color on hover */
+		}
+
+	.logout-link {
+		color: #dc3545 !important; /* Red color for logout link */
+		transition: color 0.3s ease-in-out;
+	}
+
+		.logout-link:hover {
+			color: #bd2130 !important; /* Darker red color on hover */
+		}
+</style>
+
+<ul class="navbar-nav">
+	@if (User.Identity.IsAuthenticated)
+	{
+		<li class="nav-item dropdown">
+			<a class="nav-link dropdown-toggle text-dark" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+				@User.Identity.Name
+			</a>
+			<ul class="dropdown-menu">
+				@if (User.IsInRole("admin"))
+				{
+					<li><a class="dropdown-item" asp-page="/Account/Details">Admin Profile</a></li>
+				}
+				else if (User.IsInRole("candidate"))
+				{
+					<li><a class="dropdown-item" asp-page="/Account/Details">Profile</a></li>
+				}
+				<li><hr class="dropdown-divider"></li>
+				<li><a class="dropdown-item logout-link" asp-page="/Account/Logout">Logout</a></li>
+			</ul>
+		</li>
+
+	}
+	else
+	{
+		<li class="nav-item">
+			<a class="nav-link text-dark" id="register" asp-page="/Candidates/Create">Register</a>
+		</li>
+		<li class="nav-item">
+			<a class="nav-link text-dark" id="login" asp-page="/Account/Login">Login</a>
+		</li>
+	}
 </ul>

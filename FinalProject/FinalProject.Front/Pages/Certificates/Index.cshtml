@@ -1,48 +1,66 @@
 ﻿@page
 @model FinalProject.Front.Pages.Certificates.IndexModel
 @{
-	ViewData["Title"] = "Index";
+    ViewData["Title"] = "Index";
 }
+
+<style>
+    /* Add custom styles for buttons */
+    .btn {
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+    }
+
+        .btn:hover {
+            background-color: #007bff; /* Change to the color you prefer on hover */
+            color: #fff;
+        }
+
+    .btn-danger {
+        background-color: #dc3545; /* Red color for danger */
+        color: #fff;
+    }
+
+        .btn-danger:hover {
+            background-color: #bd2130; /* Darker red on hover */
+        }
+</style>
 
 <h1>Certificates</h1>
 
-
 <table class="table">
-	<thead>
-		<tr>
-			<th>ID</th>
-			<th>Title</th>
-
-		</tr>
-
-</thead>
-<tbody>
-	@foreach (var certificate in Model.Certificates)
-	{
-		<tr>
-			<td>@certificate.Id</td>
-			<td>@certificate.Title</td>
-		
-				<td>
-
-					<a asp-page="./Details" asp-route-id="@certificate.Id">Details</a>
-					<a asp-page="./Buy" asp-route-id="@certificate.Id">Buy</a>
-					@if (User.IsInRole("admin"))
-					{
-						<a asp-page="./Edit" asp-route-id="@certificate.Id"> | Edit |</a>
-						<a asp-page="./Delete" asp-route-id="@certificate.Id">Delete</a>
-					}
-				</td>
-		</tr>
-	}
-</tbody>
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Title</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var certificate in Model.Certificates)
+        {
+            <tr>
+                <td>@certificate.Id</td>
+                <td>@certificate.Title</td>
+                <td>
+                    <a class="btn btn-primary" asp-page="./Details" asp-route-id="@certificate.Id">Details</a>
+                    <a class="btn btn-primary" asp-page="./Buy" asp-route-id="@certificate.Id">Buy</a>
+                    @if (User.IsInRole("admin"))
+                    {
+                        <a class="btn btn-primary" asp-page="./Edit" asp-route-id="@certificate.Id">Edit</a>
+                        <a class="btn btn-danger" asp-page="./Delete" asp-route-id="@certificate.Id">Delete</a>
+                    }
+                </td>
+            </tr>
+        }
+    </tbody>
 </table>
 
 <div>
-	@if (User.IsInRole("admin"))
-	{
-		<a class="btn btn-primary" asp-page="/Certificates/Create">Create New Certificate</a>
-	}
+    @if (User.IsInRole("admin"))
+    {
+        <a class="btn btn-primary" asp-page="/Certificates/Create">Create New Certificate</a>
+    }
 </div>
+
 
 
