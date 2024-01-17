@@ -5,14 +5,16 @@ using FinalProject.Data.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+
 using Microsoft.Extensions.Hosting;
 using System;
 using System.Runtime.CompilerServices;
 using Microsoft.Extensions.Hosting.Internal;
 
+
 namespace FinalProject.Back.Controllers
 
-    // Certificate CRUID
+// Certificate CRUID
 {
     [Route("api/[controller]")]
     [ApiController]
@@ -102,6 +104,7 @@ namespace FinalProject.Back.Controllers
 
             return Ok(CertificateViewDto.FromEntity(certificate));
         }
+
 
         [HttpGet("/image/{imageName}")]
         public IActionResult GetImage(string imageName)

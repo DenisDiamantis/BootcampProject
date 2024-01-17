@@ -31,7 +31,11 @@
                         }
                         else if (User.IsInRole("marker"))
                         {
-                            <partial name="_MarkerPartial" />
+                            <partial name="_MarkersPartial" />
+                        }
+                        else if (User.IsInRole("candidate"))
+                        {
+                            <partial name="_CandidatePartial" />
                         }
                         else
                         {

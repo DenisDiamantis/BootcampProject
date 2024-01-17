@@ -1,7 +1,4 @@
-﻿using FinalProject.Data.Dtos.AcountDtos;
-using FinalProject.Data.Dtos.CertificateDtos;
-
-namespace FinalProject.Data.Entities
+﻿namespace FinalProject.Data.Entities
 {
 	public class UserCertificate
 	{
@@ -14,9 +11,11 @@ namespace FinalProject.Data.Entities
 
 		public string Grade { get; set; }
 
-		public DateTime Created { get; set; } 
+		public DateTime Created { get; set; }
 
 		public string Status { get; set; }
+		public int UserId { get; set; }
+		public int CertificateId { get; set; }
 
 		public User User { get; set; }
 
@@ -31,7 +30,7 @@ namespace FinalProject.Data.Entities
 				Description = certificate.Description,
                 ImageUrl = certificate.ImageUrl,
 				Created = DateTime.Now,
-				Status = "Puchased",
+				Status = "Issued",
 				User = user,
 				Certificate = certificate,
 				Grade = "TBD"
@@ -39,9 +38,9 @@ namespace FinalProject.Data.Entities
 			};
 		}
 
-		public  UserCertificate UpdateStatus(string status) 
-		{ 
-			this.Status = status;
+		public UserCertificate UpdateGrade(string grade)
+		{
+			this.Grade = grade;
 
 			return this;
 		}

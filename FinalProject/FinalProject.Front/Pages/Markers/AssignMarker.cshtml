@@ -1,0 +1,68 @@
+﻿@page
+@model FinalProject.Front.Pages.Markers.AssignMarkerModel
+@{
+}
+<h1>Markers</h1>
+
+
+<table class="table">
+	<thead>
+		<tr>
+			<th>First Name</th>
+			<th>Last Name</th>
+			<th>Email</th>
+			<th>Assinged Exams</th>
+		</tr>
+
+	</thead>
+	<tbody>
+		@foreach (var marker in Model.Markers)
+		{
+			<tr>
+				<td>@marker.FirstName</td>
+				<td>@marker.LastName</td>
+				<td>@marker.Email</td>
+				@{
+					int i = Model.Exams.Where(x => x.MarkerId == marker.Id).Count();
+				}
+				<td>@i</td>
+				<td>
+					<button type="button" onclick="selectMarker(@marker.Id);">Select</button>
+				</td>
+			</tr>
+		}
+	</tbody>
+</table>
+
+
+<script>
+	function selectMarker(markerId) {
+
+					var exam = {
+						"id": @ViewData["examId"],
+						"markerId":markerId
+					}
+				
+
+					$.ajax({
+						url: 'https://localhost:7193/api/Exam/AddMarker',
+						type: 'POST',
+						dataType: 'JSON',
+						contentType: 'application/json; charset=utf-8',
+						data: JSON.stringify(exam),
+						success: function (data) {
+							
+							window.location.href = '/Exams/Index';
+							
+						},
+						error: function (data) {
+							alert("Answers could not be saved.");
+						}
+
+					})
+			
+		
+
+	}
+
+</script>

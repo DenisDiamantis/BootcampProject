@@ -6,25 +6,27 @@ using System.Runtime.Intrinsics.X86;
 
 namespace FinalProject.Front.Pages.Certificates
 {
-    public class DetailsModel : PageModel
-    {
-        private readonly CertificateService _context;
+	public class DetailsModel : PageModel
+	{
+		private readonly CertificateService _context;
 
-        public DetailsModel(CertificateService context)
-        {
-            _context = context;
-        }
+		public DetailsModel(CertificateService context)
+		{
+			_context = context;
+		}
+
 
         public byte[] ImageUrl { get; set; } = null;
 
         public CertificateViewDto Certificate { get; set; } = default!;
 
-        public async Task<IActionResult> OnGetAsync(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
+
+		public async Task<IActionResult> OnGetAsync(int? id)
+		{
+			if (id == null)
+			{
+				return NotFound();
+			}
 
             var certificate = await _context.GetCertificateByIdAsync(id.Value);
             if (certificate == null)

@@ -5,24 +5,28 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace FinalProject.Front.Pages.Certificates
 {
-    public class EditModel : PageModel
-    {
-        private readonly CertificateService _context;
+	public class EditModel : PageModel
+	{
+		private readonly CertificateService _context;
 
-        public EditModel(CertificateService context)
-        {
-            _context = context;
-        }
+		public EditModel(CertificateService context)
+		{
+			_context = context;
+		}
+
 
         [BindProperty]
         public CertificateUpdateDto Certificate { get; set; } = default;
 
-        public async Task<IActionResult> OnGetAsync(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
+
+
+		public async Task<IActionResult> OnGetAsync(int? id)
+		{
+			if (id == null)
+			{
+				return NotFound();
+			}
+
 
             var certificate = await _context.GetCertificateByIdAsync(id.Value);
             if (certificate == null)
@@ -49,4 +53,5 @@ namespace FinalProject.Front.Pages.Certificates
             return RedirectToPage("/Certificates/Index");
         }
     }
+
 }

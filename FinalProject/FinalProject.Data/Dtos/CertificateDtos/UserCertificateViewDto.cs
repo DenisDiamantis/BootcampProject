@@ -1,9 +1,4 @@
 ﻿using FinalProject.Data.Entities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace FinalProject.Data.Dtos.CertificateDtos
 {
@@ -22,6 +17,8 @@ namespace FinalProject.Data.Dtos.CertificateDtos
 
 		public string Status { get; set; }
 
+		public int UserId { get; set; }
+		public int CertificateId { get; set; }
 		public User User { get; set; }
 
 		public Certificate Certificate { get; set; }
@@ -38,7 +35,9 @@ namespace FinalProject.Data.Dtos.CertificateDtos
 				Created = userCertificate.Created,
 				Status = userCertificate.Status,
 				User = userCertificate.User,
-				Certificate = userCertificate.Certificate
+				Certificate = userCertificate.Certificate,
+				UserId = userCertificate.UserId,
+				CertificateId = userCertificate.CertificateId
 			};
 		}
 	}
