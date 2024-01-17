@@ -1,11 +1,13 @@
 using FinalProject.Data.Dtos.CertificateDtos;
 using FinalProject.Front.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using System.Security.Claims;
 
 namespace FinalProject.Front.Pages.Certificates
 {
+
 	public class BuyModel : PageModel
 	{
 		private readonly ExamService _context;
@@ -85,4 +87,5 @@ namespace FinalProject.Front.Pages.Certificates
 		//    }
 		//}
 	}
+
 }
