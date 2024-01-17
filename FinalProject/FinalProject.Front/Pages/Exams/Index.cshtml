@@ -1,0 +1,157 @@
+﻿@page
+@model FinalProject.Front.Pages.Exams.IndexModel
+@{
+	ViewData["Title"] = "Index";
+}
+
+
+<h1>Exam Templates</h1>
+
+
+<table class="table">
+	<thead>
+		<tr>
+			<th>Exam Template ID</th>
+			<th>Certificate</th>
+			<th>Number of Questions</th>
+			<th>Minimum correct Answers</th>
+			<th>Exam Date</th>
+		</tr>
+
+	</thead>
+	<tbody>
+		@foreach (var examTemplate in Model.ExamTemplates)
+		{
+			<tr>
+				<td>@examTemplate.Id</td>
+				<td>@Model.Certificates.FirstOrDefault(x=>x.Id==examTemplate.CertificateId)!.Title</td>
+				<td>@examTemplate.MaxScore</td>
+				<td>@examTemplate.MinScore</td>
+				<td>@examTemplate.ExamDate</td>
+				
+				<td>
+
+					<a asp-page="./Details" asp-route-id="@examTemplate.Id">Details</a>
+					@if (User.IsInRole("admin"))
+					{
+						<a asp-page="./Edit" asp-route-id="@examTemplate.Id"> | Edit |</a>
+						<a asp-page="./Delete" asp-route-id="@examTemplate.Id">Delete</a>
+					}
+				</td>
+			</tr>
+		}
+	</tbody>
+</table>
+
+<div>
+	@if (User.IsInRole("admin"))
+	{
+		<a class="btn btn-primary" asp-page="./ChooseCertificate">Create New Exam</a>
+	}
+</div>
+
+<br/>
+<hr/>
+<br />
+
+<h1>Exams</h1>
+
+<table class="table">
+	<thead>
+		<tr>
+			<th>Exam ID</th>
+			<th>Candidate Number</th>
+			<th>Certificate</th>
+			<th>Candidate Score</th>
+			<th>Result</th>
+			<th>Evaluation Status</th>
+			<th>Marker ID</th>
+		</tr>
+
+	</thead>
+	<tbody>
+		@foreach (var exam in Model.Exams)
+		{
+			<tr>
+				<td>@exam.Id</td>
+				<td>@exam.CandidateNumber</td>
+				<td>@Model.Certificates.FirstOrDefault(x => x.Id == exam.CertificateId)!.Title</td>
+				@if (@exam.CandidateScore < 0)
+				{
+					<td>-</td>
+					<td>-</td>
+					<td>-</td>
+				}
+				else
+				{
+					<td>@exam.CandidateScore</td>
+					if (@exam.Result)
+					{
+						<td>Passed</td>
+					}
+					else
+					{
+						<td>Failed</td>
+					}
+					if (@exam.Marked)
+					{
+						if (exam.Evaluation)
+						{
+							<td>Approved</td>
+						}
+						else
+						{
+							<td>Denied</td>
+						}
+					}
+					else
+					{
+						<td>Pending</td>
+					}
+				}
+
+
+					@if (@exam.MarkerId==0)
+					{
+						<td>-</td>
+						<td><a asp-page="/Markers/AssignMarker" asp-route-examId="@exam.Id">Assign Marker</a></td>
+					}
+					else
+					{
+						<td>@exam.MarkerId</td>
+						if (exam.Marked && exam.Result&&exam.Evaluation)
+						{
+							var userCertificateCheck = Model.UserCertificates.FirstOrDefault(x => x.UserId == Model.Candidates.FirstOrDefault(c => c.Number == exam.CandidateNumber)!.UserId);
+							if(userCertificateCheck is not null)
+							{
+								if (userCertificateCheck.CertificateId == exam.CertificateId)
+									{
+										<td>Certificate Issued</td>
+									}
+									
+							}
+						else
+						{
+							<td><a asp-page="/Certificates/IssueCertificate" asp-route-examId="@exam.Id">Issue Certificate</a></td>
+						}
+						}
+						else
+						{
+							if (!exam.Result)
+								{
+								<td>Resolved.</td>
+								}
+							else
+								{
+								<td>Not marked yet.</td>
+								}
+
+					}
+	
+}
+
+			</tr>
+		
+		}
+	</tbody>
+</table>

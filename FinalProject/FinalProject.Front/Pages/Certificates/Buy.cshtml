@@ -8,21 +8,57 @@
 
 <h4>Buy Certificate</h4>
 <hr />
+<h1>Certificate Details</h1>
+
+<div>
+    <h4>
+        @Html.DisplayFor(model => model.Certificate.Title)
+    </h4>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Certificate.Title)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Certificate.Title)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Certificate.Description)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Certificate.Description)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Certificate.Cost)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Certificate.Cost)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Certificate.Photo)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Certificate.Photo)
+        </dd>
+    </dl>
+</div>
+
 <div class="row">
     <div class="col-md-4">
+
         <form method="post">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
-            <!-- Ensure UserCertificate is initialized before accessing its properties -->
+@*             <!-- Ensure UserCertificate is initialized before accessing its properties -->
             @if (Model.UserCertificate != null)
             {
                 <label asp-for="UserCertificate.Id"></label>
                 <input type="hidden" asp-for="UserCertificate.Id" />
             }
-
+            *@
             <div class="form-group">
                 <input type="submit" value="Buy" class="btn btn-primary" />
-            </div>
+            </div> 
         </form>
     </div>
 </div>

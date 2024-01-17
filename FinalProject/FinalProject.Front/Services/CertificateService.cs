@@ -1,7 +1,6 @@
 ﻿
 using FinalProject.Data.Dtos.CertificateDtos;
 using FinalProject.Front.Helpers;
-using Microsoft.AspNetCore.Mvc;
 using System.Net.Http.Headers;
 using System.Text;
 using System.Text.Json;
@@ -12,15 +11,14 @@ namespace FinalProject.Front.Services
 	public class CertificateService
 	{
 		private readonly HttpClient _httpClient;
-		private readonly IContextHelper _contextHelper;
+
 		private readonly string _apiBaseUrl = "https://localhost:7193/api/certificate"; // Adjust the URL as per your backend API
 
-		public CertificateService(HttpClient httpClient, IContextHelper contextHelper)
+		public CertificateService(HttpClient httpClient)
 		{
 			_httpClient = httpClient;
-			_contextHelper = contextHelper;
 			_httpClient.DefaultRequestHeaders.Authorization =
-					new AuthenticationHeaderValue("Bearer", _contextHelper.Token);
+					new AuthenticationHeaderValue("Bearer", ContextHelper.Token);
 		}
 
 		//Get all certificate

@@ -19,7 +19,7 @@ namespace FinalProject.Front.Pages
 		{
 			if (User.Identity.IsAuthenticated)
 			{
-				_contextHelper.Token = HttpContext.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Hash)?.Value;
+				ContextHelper.Token = HttpContext.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Hash)?.Value;
 			}
 		}
 	}

@@ -1,0 +1,88 @@
+﻿@page
+@model FinalProject.Front.Pages.Exams.ExamModel
+@{
+	ViewData["Title"] = "Exam";
+}
+
+<h2>Exam</h2>
+
+@{
+	int j =0 ;
+}
+@foreach(var item in Model.Questions)
+{
+
+
+	<table class>
+		<tr>
+			@{j++;}
+			<td>@j ) @item.QuestionText ?</td>
+		</tr>
+		<tr>
+			<td>
+				<input id="AnswerA" type="radio" name="@item.Id" class="rb" value="A @item.AnswerA"/>A) @item.AnswerA
+			</td>
+		</tr>
+		<tr>
+			<td>
+				<input id="AnswerB" type="radio" name="@item.Id" class="rb" value="B @item.AnswerB" />B) @item.AnswerB
+			</td>
+		</tr>
+		<tr>
+			<td>
+				<input id="AnswerC" type="radio" name="@item.Id" class="rb" value="C @item.AnswerC" />C) @item.AnswerC
+			</td>
+		</tr>
+		<tr>
+			<td>
+				<input id="AnswerD" type="radio" name="@item.Id" class="rb" value="D @item.AnswerD" />D) @item.AnswerD
+			</td>
+		</tr>
+	</table>
+
+	}
+<button id="button1" type="button" value="Submit" class="btn-success" onclick="getAnswers();">Submit</button>
+<label id="Answers"></label>
+
+<script>
+	function getAnswers() {
+		document.getElementById("Answers").innerHTML = "";
+		
+		var result = document.getElementsByTagName("input");
+		for (i = 0; i < result.length; i++) {
+			if (result[i].type == "radio") {
+				if (result[i].checked) {
+					document.getElementById("Answers").innerHTML += "QuestionId: " + result[i].name + ")" +
+						"Your selected answer is: " + result[i].value.charAt(0) + "<br/>";
+						
+
+					var CandidateAnswer = {
+						"examId": @ViewData["examId"],
+						"questionTemplateId": parseInt(result[i].name),
+						"candidateAnswer": result[i].value.charAt(0)
+					}
+					console.log(CandidateAnswer);
+					$.ajax({
+						url: 'https://localhost:7193/api/Exam/saveAnswers',
+						type: 'POST',
+						dataType: 'JSON',
+						contentType: 'application/json; charset=utf-8',
+						data: JSON.stringify(CandidateAnswer),
+						success: function (data) {
+							if (i = result.length-1) {
+								window.location.href = `/Exams/ExamResults?examId=@ViewData["examId"]`;
+							}
+						},
+						error: function (data) {
+							alert("Answers could not be saved.");
+						}
+
+					});
+				}
+			}
+		}
+
+	}
+
+</script>
+

@@ -1,0 +1,42 @@
+﻿@page
+@model MarkersModel
+@{
+}
+<h1>Markers</h1>
+
+
+<table class="table">
+	<thead>
+		<tr>
+			<th>First Name</th>
+			<th>Last Name</th>
+			<th>Email</th>
+			<th>Address</th>
+			<th>Phone</th>
+			<th>Assinged Exams</th>
+		</tr>
+
+	</thead>
+	<tbody>
+		@foreach (var marker in Model.Markers)
+		{
+			<tr>
+				<td>@marker.FirstName</td>
+				<td>@marker.LastName</td>
+				<td>@marker.Email</td>
+				<td>@marker.Address</td>
+				<td>@marker.Phone</td>
+				@{
+					int i = Model.Exams.Where(x => x.MarkerId == marker.Id).Count();
+				}
+				<td>@i</td>
+			</tr>
+		}
+	</tbody>
+</table>
+@if (User.IsInRole("admin"))
+{
+	<div>
+		<a class="btn btn-primary" asp-page="/Markers/Create">Create New Marker</a>
+	</div>
+}
