@@ -1,4 +1,34 @@
-﻿
+﻿<style>
+	.navbar-nav {
+		display: flex;
+		list-style: none;
+		padding: 0;
+		margin: 0;
+	}
+
+	.nav-item {
+		margin-right: 10px; /* Add some margin between items */
+	}
+
+	.nav-link {
+		text-decoration: none;
+		color: #343a40; /* Set default text color */
+		transition: color 0.3s, transform 0.3s;
+	}
+
+		.nav-link:hover {
+			font-weight: bold; /* Bold text on hover */
+			color: #007bff; /* Change text color on hover */
+			transform: scale(1.1); /* Slight scale-up effect on hover */
+		}
+
+		.nav-link.active {
+			font-weight: bold; /* Bold text for the active option */
+			color: #007bff; /* Set active text color */
+		}
+</style>
+
+
 <li class="nav-item">
     <a class="nav-link text-dark" asp-area="" asp-page="/Index">Home</a>
 </li>

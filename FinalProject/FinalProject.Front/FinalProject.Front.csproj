@@ -27,6 +27,7 @@
     <None Include="Pages\Exams\Delete.cshtml" />
     <None Include="Pages\Exams\Details.cshtml" />
     <None Include="Pages\Exams\Edit.cshtml" />
+    <None Include="wwwroot\css\Details.css" />
   </ItemGroup>
 
   <ItemGroup>

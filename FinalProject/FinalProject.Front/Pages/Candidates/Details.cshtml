@@ -3,7 +3,51 @@
 @{
 	ViewData["Title"] = "Details";
 }
+<head>
+	<style>
+		/* Add custom styles for buttons and image */
+		.btn-primary {
+			background-color: #3498db; /* Blue color for primary button */
+			color: #fff;
+			transition: background-color 0.3s ease;
+			margin-right: 10px; /* Add margin between buttons */
+		}
 
+			.btn-primary:hover {
+				background-color: #2980b9; /* Darker blue on hover */
+			}
+
+		.btn-success {
+			background-color: #2ecc71; /* Green color for success button */
+			color: #fff;
+			transition: background-color 0.3s ease;
+		}
+
+			.btn-success:hover {
+				background-color: #27ae60; /* Darker green on hover */
+			}
+
+		.certificate-image {
+			max-width: 50%; /* Set the maximum width to 100% to make the image responsive */
+			height: auto; /* Maintain aspect ratio */
+		}
+
+		.button-container {
+			margin-top: 10px; /* Add margin above the buttons */
+		}
+		/* Customize the "Edit" button to be green */
+		.btn-edit {
+			background-color: #2ecc71; /* Green color for the "Edit" button */
+			color: #fff;
+			transition: background-color 0.3s ease;
+			margin-right: 10px; /* Add margin between buttons */
+		}
+
+			.btn-edit:hover {
+				background-color: #27ae60; /* Darker green on hover */
+			}
+	</style>
+</head>
 <h1>Candidate Details</h1>
 
 <div>

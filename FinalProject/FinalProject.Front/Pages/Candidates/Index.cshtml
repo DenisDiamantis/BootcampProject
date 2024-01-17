@@ -3,7 +3,33 @@
 @{
 	ViewData["Title"] = "Index";
 }
+<head>
+	<style>
+		/* Add custom styles for buttons */
+		.btn {
+			cursor: pointer;
+			transition: background-color 0.3s ease;
+		}
 
+			.btn:hover {
+				background-color: #007bff; /* Change to the color you prefer on hover */
+				color: #fff;
+			}
+
+		.btn-danger {
+			background-color: #dc3545; /* Red color for danger */
+			color: #fff;
+		}
+
+			.btn-danger:hover {
+				background-color: #bd2130; /* Darker red on hover */
+			}
+		/* Add style for smaller Candidate Number */
+		.small-candidate-number {
+			font-size: 12px; /* Adjust the font size as needed */
+		}
+	</style>
+</head>
 <h1>Candidates</h1>
 
 
