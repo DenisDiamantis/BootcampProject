@@ -4,6 +4,7 @@
 	ViewData["Title"] = "Index";
 }
 
+
 <h1>Exam Templates</h1>
 
 
@@ -49,4 +50,108 @@
 	}
 </div>
 
+<br/>
+<hr/>
+<br />
 
+<h1>Exams</h1>
+
+<table class="table">
+	<thead>
+		<tr>
+			<th>Exam ID</th>
+			<th>CandidateId</th>
+			<th>Certificate</th>
+			<th>Candidate Score</th>
+			<th>Result</th>
+			<th>Evaluation Status</th>
+			<th>Marker ID</th>
+		</tr>
+
+	</thead>
+	<tbody>
+		@foreach (var exam in Model.Exams)
+		{
+			<tr>
+				<td>@exam.Id</td>
+				<td>@exam.CandidateNumber</td>
+				<td>@Model.Certificates.FirstOrDefault(x => x.Id == exam.CertificateId)!.Title</td>
+				@if (@exam.CandidateScore < 0)
+				{
+					<td>-</td>
+					<td>-</td>
+					<td>-</td>
+				}
+				else
+				{
+					<td>@exam.CandidateScore</td>
+					if (@exam.Result)
+					{
+						<td>Passed</td>
+					}
+					else
+					{
+						<td>Failed</td>
+					}
+					if (@exam.Marked)
+					{
+						if (exam.Evaluation)
+						{
+							<td>Approved</td>
+						}
+						else
+						{
+							<td>Denied</td>
+						}
+					}
+					else
+					{
+						<td>Pending</td>
+					}
+				}
+
+
+					@if (@exam.MarkerId==0)
+					{
+						<td>-</td>
+						<td><a asp-page="/Markers/AssignMarker" asp-route-examId="@exam.Id">Assign Marker</a></td>
+					}
+					else
+					{
+						<td>@exam.MarkerId</td>
+						if (exam.Marked && exam.Result&&exam.Evaluation)
+						{
+							var userCertificateCheck = Model.UserCertificates.FirstOrDefault(x => x.UserId == Model.Candidates.FirstOrDefault(c => c.Number == exam.CandidateNumber)!.UserId);
+							if(userCertificateCheck is not null)
+							{
+								if (userCertificateCheck.CertificateId == exam.Id)
+									{
+										<td>Certificate Issued</td>
+									}
+									else
+									{
+								<td><a asp-page="/Certificates/IssueCertificate" asp-route-examId="@exam.Id">Issue Certificate</a></td>
+							}
+						}
+
+					}
+					else
+					{
+						if (!exam.Result)
+						{
+							<td>Resolved.</td>
+						}
+						else
+						{
+							<td>Not marked yet.</td>
+						}
+						
+						}
+						
+					}
+
+
+			</tr>
+		}
+	</tbody>
+</table>

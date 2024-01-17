@@ -4,7 +4,7 @@
 	ViewData["Title"] = "Exam";
 }
 
-<h2>Attendance</h2>
+<h2>Exam</h2>
 
 @{
 	int j =0 ;
@@ -43,9 +43,7 @@
 	}
 <button id="button1" type="button" value="Submit" class="btn-success" onclick="getAnswers();">Submit</button>
 <label id="Answers"></label>
-@{
-	int counter = 0;
-}
+
 <script>
 	function getAnswers() {
 		document.getElementById("Answers").innerHTML = "";
@@ -59,7 +57,6 @@
 						
 
 					var CandidateAnswer = {
-						"id": 0,
 						"examId": @ViewData["examId"],
 						"questionTemplateId": parseInt(result[i].name),
 						"candidateAnswer": result[i].value.charAt(0)
@@ -72,15 +69,12 @@
 						contentType: 'application/json; charset=utf-8',
 						data: JSON.stringify(CandidateAnswer),
 						success: function (data) {
-							if (data.success) {
-								alert(data.message);
-								window.location.href = "/Index";
+							if (i = result.length-1) {
+								window.location.href = `/Exams/ExamResults?examId=@ViewData["examId"]`;
 							}
 						},
 						error: function (data) {
-							console.log(CandidateAnswer);
-							console.log(data);
-							alert(data);
+							alert("Answers could not be saved.");
 						}
 
 					});

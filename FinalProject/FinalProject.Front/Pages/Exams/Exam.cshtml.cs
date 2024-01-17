@@ -8,13 +8,10 @@ namespace FinalProject.Front.Pages.Exams
 	public class ExamModel : PageModel
 	{
 		private readonly ExamService _context;
-		private readonly CertificateService _certificateHelper;
-		protected static int Number;
-
-		public ExamModel(ExamService context, CertificateService certificateHelper)
+		public ExamModel(ExamService context)
 		{
 			_context = context;
-			_certificateHelper = certificateHelper;
+
 		}
 
 		public static int ExamId { get; set; }

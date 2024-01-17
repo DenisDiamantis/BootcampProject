@@ -1,0 +1,116 @@
+﻿@page
+@model FinalProject.Front.Pages.Markers.EvaluationModel
+@{
+}
+<h2>Exam</h2>
+
+@{
+	int j = 0;
+}
+<table class="table">
+	<thead>
+		<tr>
+			<th>Exam Questions</th>
+			<th>Evaluation</th>
+		</tr>
+
+	</thead>
+	@foreach (var item in Model.Questions)
+		{
+
+		<tbody>
+
+		<tr>
+			@{
+				j++;
+				char candidateAnswer = Model.Answers.FirstOrDefault(x => x.QuestionTemplateId == item.Id)!.CandidateAnswer;
+			}
+			<td>@j ) @item.QuestionText ?</td>
+				<td> 	<h6>Candidate Answer: @candidateAnswer.</h6> </td>
+		</tr>
+		<tr>
+			<td>
+					<label class="control-label">A) @item.AnswerA</label>
+			</td>
+				<td>
+					<h6>Correct Answer: @item.CorrectAnwser.</h6>
+				</td>
+		</tr>
+		<tr>
+			<td>
+					<label class="control-label">B) @item.AnswerB</label>
+			</td>
+				<td>
+					@if (item.CorrectAnwser == candidateAnswer)
+					{
+					<h6>Result: Correct</h6>
+					}
+					else
+					{
+
+					<h6>Result: Wrong</h6>
+					}
+				</td>
+		</tr>
+		<tr>
+			<td>
+				<label class="control-label">C) @item.AnswerC</label>
+
+			</td>
+				<td>
+					<input type="radio" name="@item.Id" value="Approve" class="rb" /> Approve
+				</td>
+
+		</tr>
+		<tr>
+			<td>
+					<label class="control-label">D) @item.AnswerD</label>
+			</td>
+				<td>
+					<input type="radio" name="@item.Id" class="rb" value="Deny" /> Deny
+				</td>
+		</tr>
+
+		</tbody>
+	}
+</table>
+<button id="button1" type="button" value="Submit" class="btn-success" onclick="getAnswers();">Submit</button>
+
+
+<script>
+	function getAnswers() {
+		var approve =true;
+		var result = document.getElementsByTagName("input");
+		for (i = 0; i < result.length; i++) {
+			if (result[i].type == "radio") {
+				if (result[i].checked) {
+					if (result[i].value == "Deny") {
+						approve = false;
+						break;
+					}
+				}
+			}
+		}
+		var exam = {
+			"id": @ViewData["examId"],
+			"marked": true,
+			"evaluation": approve
+		}
+		console.log(exam);
+	$.ajax({
+			url: 'https://localhost:7193/api/Exam/MarkExam',
+			type: 'POST',
+			dataType: 'JSON',
+			contentType: 'application/json; charset=utf-8',
+			data: JSON.stringify(exam),
+			success: function (data) {
+					
+			},
+			error: function (data) {
+				alert("Answers could not be saved.");
+			}
+
+		});
+	}
+
+</script>

@@ -4,7 +4,6 @@ using FinalProject.Data.Entities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using System.Runtime.CompilerServices;
 
 namespace FinalProject.Back.Controllers
 {
@@ -23,17 +22,17 @@ namespace FinalProject.Back.Controllers
 
 		//UserCertificate CRUD
 
-		[HttpPost()]
+		[HttpPost("{examId}")]
 		[Authorize(Roles = "admin")]
-		public async Task<ActionResult<AsyncVoidMethodBuilder>> CreateUserCertificate(UserCertificateCreateDto createDto)
+		public async Task<ActionResult> CreateUserCertificate(int examId)
 		{
-			var userIdClaim = User.Claims.FirstOrDefault(c => c.Type == "id");
-			var certificate = await _context.Certificates.FirstOrDefaultAsync(ce => ce.Id == createDto.Id);
-			int userId = Int32.Parse(userIdClaim?.Value!);
-			var user = _context.Users.FirstOrDefault(u => u.Id == userId);
 
-			var userCertificate = UserCertificate.ToEntity(user, certificate);
+			var exam = await _context.Exam.FirstOrDefaultAsync(x => x.Id == examId);
+			var candidate = await _context.Candidates.Include(x => x.User).FirstOrDefaultAsync(c => c.Number == exam.CandidateNumber);
+			var certificate = _context.Certificates.FirstOrDefault(ce => ce.Id == exam.CertificateId);
 
+			var userCertificate = UserCertificate.ToEntity(candidate.User, certificate);
+			userCertificate.Grade = exam.CandidateScore.ToString() + "%";
 			_context.UserCertificates.Add(userCertificate);
 			await _context.SaveChangesAsync();
 
@@ -41,13 +40,9 @@ namespace FinalProject.Back.Controllers
 		}
 
 		[HttpGet]
-		[Authorize(Roles = "candidate,admin,marker")]
-		public async Task<ActionResult<IEnumerable<UserCertificateViewDto>>> GetAllCertificatesByUserId()
+		[Authorize(Roles = "admin")]
+		public async Task<ActionResult<IEnumerable<UserCertificateViewDto>>> GetAllCertificates()
 		{
-			var userIdClaim = User.Claims.FirstOrDefault(c => c.Type == "id");
-			int userId = Int32.Parse(userIdClaim?.Value);
-
-			var certificates = await _context.GetAllCertificatesByUserIdAsync(userId);
 
 			var result = await _context.UserCertificates
 				.Select(x => UserCertificateViewDto.FromEntity(x))
@@ -55,25 +50,35 @@ namespace FinalProject.Back.Controllers
 
 			return Ok(result);
 		}
+		[HttpGet("{userId}")]
 
-
-		[HttpPut("{id}")]
-		[Authorize(Roles = "admin")]
-		public async Task<ActionResult<UserCertificateViewDto>> UpdateUserCertificateDto(int id, string status)
+		public async Task<ActionResult<IEnumerable<UserCertificateViewDto>>> GetAllCertificatesById(int userId)
 		{
-			var userCertificate = await _context.UserCertificates.FirstOrDefaultAsync(x => x.Id == id);
+			var result = await _context.UserCertificates.Where(uc => uc.UserId == userId)
+				.Select(x => UserCertificateViewDto.FromEntity(x))
+				.ToListAsync();
 
-			if (userCertificate == null)
-			{
-				return NotFound();
-			}
-
-			userCertificate.UpdateStatus(status);
-
-			await _context.SaveChangesAsync();
-
-			return Ok(UserCertificateViewDto.FromEntity(userCertificate));
+			return Ok(result);
 		}
+
+
+		//[HttpPut("{id}")]
+		//[Authorize(Roles = "admin")]
+		//public async Task<ActionResult<UserCertificateViewDto>> UpdateUserCertificateDto(int id, string status)
+		//{
+		//	var userCertificate = await _context.UserCertificates.FirstOrDefaultAsync(x => x.Id == id);
+
+		//	if (userCertificate == null)
+		//	{
+		//		return NotFound();
+		//	}
+
+		//	userCertificate.UpdateStatus(status);
+
+		//	await _context.SaveChangesAsync();
+
+		//	return Ok(UserCertificateViewDto.FromEntity(userCertificate));
+		//}
 
 
 	}

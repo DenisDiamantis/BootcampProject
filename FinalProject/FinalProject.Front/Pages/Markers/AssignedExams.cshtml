@@ -1,0 +1,46 @@
+﻿@page
+@model FinalProject.Front.Pages.Markers.AssignedExamsModel
+@{
+}
+<table class="table">
+	<thead>
+		<tr>
+			<th>Exam ID</th>
+			<th>Certificate</th>
+			<th>Candidate Score</th>
+			<th>Result</th>
+			<th>Evaluation Status</th>
+		</tr>
+
+	</thead>
+	<tbody>
+		@foreach (var exam in Model.Exams)
+		{
+			<tr>
+				<td>@exam.Id</td>
+				<td>@Model.Certificates.FirstOrDefault(x => x.Id == exam.CertificateId)!.Title</td>
+				<td>@exam.CandidateScore</td>
+					@if (@exam.Result)
+					{
+						<td>"Passed"</td>
+					}
+					else
+					{
+						<td>"Failed"</td>
+					}
+					if (@exam.Marked)
+					{
+						<td>Finished</td>
+					}
+					else
+					{
+						<td>Pending</td>
+					}
+				}
+					<td>-</td>
+					<td><a asp-page="/Markers/Evaluation" asp-route-examId="@exam.Id">Evaluate</a></td>
+
+			</tr>
+		}
+	</tbody>
+</table>

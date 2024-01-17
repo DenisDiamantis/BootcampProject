@@ -11,7 +11,7 @@ namespace FinalProject.Data.Entities.Exam
 		public required string AnswerB { get; set; }
 		public required string AnswerC { get; set; }
 		public required string AnswerD { get; set; }
-		public required string CorrectAnwser { get; set; }
+		public required char CorrectAnwser { get; set; }
 
 		public static QuestionTemplate ToEntity(QuestionTemplateDto question)
 		{
