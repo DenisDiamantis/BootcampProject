@@ -9,7 +9,7 @@ namespace FinalProject.Data.Dtos.CertificateDtos
 
 		public string Description { get; set; }
 
-		public string Photo { get; set; }
+		public string ImageUrl { get; set; }
 
 		public string Grade { get; set; }
 
@@ -30,7 +30,7 @@ namespace FinalProject.Data.Dtos.CertificateDtos
 				Id = userCertificate.Id,
 				Title = userCertificate.Title,
 				Description = userCertificate.Description,
-				Photo = userCertificate.Photo,
+                ImageUrl = userCertificate.ImageUrl,
 				Grade = userCertificate.Grade,
 				Created = userCertificate.Created,
 				Status = userCertificate.Status,

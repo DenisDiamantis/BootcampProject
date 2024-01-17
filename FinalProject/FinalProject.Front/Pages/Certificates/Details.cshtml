@@ -7,39 +7,25 @@
 <h1>Certificate Details</h1>
 
 <div>
-    <h4>
-        @Html.DisplayFor(model => model.Certificate.Title)
-    </h4>
-    <hr />
-    <dl class="row">
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Certificate.Title)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Certificate.Title)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Certificate.Description)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Certificate.Description)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Certificate.Cost)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Certificate.Cost)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Certificate.Photo)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Certificate.Photo)
-        </dd>
-    </dl>
+    <h2>@Model.Certificate.Title</h2>
+    <p>@Model.Certificate.Description</p>
+    <p>Cost: $@Model.Certificate.Cost</p>
+
+    @{
+        // Assuming ImageUrl contains the URL to fetch the image
+        byte[] imageData = Model.ImageUrl;
+    }
+
+    @if (imageData != null && imageData.Length > 0)
+    {
+        <img src="data:image/jpeg;base64,@Convert.ToBase64String(imageData)" alt="Certificate Image" />
+    }
+    else
+    {
+        <p>Error: No image available</p>
+    }
 </div>
 <p>
     <a class="btn btn-primary" asp-page="./Edit" asp-route-id="@Model.Certificate.Id">Edit</a>
     <a class="btn btn-primary" asp-page="./Index">Back to List</a>
-
 </p>

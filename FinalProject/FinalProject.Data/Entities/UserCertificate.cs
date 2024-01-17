@@ -7,7 +7,7 @@
 
 		public string Description { get; set; }
 
-		public string Photo { get; set; }
+		public string ImageUrl { get; set; }
 
 		public string Grade { get; set; }
 
@@ -28,7 +28,7 @@
 			{
 				Title = certificate.Title,
 				Description = certificate.Description,
-				Photo = certificate.Photo,
+                ImageUrl = certificate.ImageUrl,
 				Created = DateTime.Now,
 				Status = "Issued",
 				User = user,
