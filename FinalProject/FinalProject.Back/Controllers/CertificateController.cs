@@ -6,11 +6,6 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
-using Microsoft.Extensions.Hosting;
-using System;
-using System.Runtime.CompilerServices;
-using Microsoft.Extensions.Hosting.Internal;
-
 
 namespace FinalProject.Back.Controllers
 
@@ -44,7 +39,7 @@ namespace FinalProject.Back.Controllers
 
         [HttpGet]
         [Route("{id}")]
-        [Authorize(Roles = "admin")]
+
         public async Task<ActionResult<IEnumerable<CertificateViewDto>>> GetCertificateById(int id)
         {
             var certificate = await _context.Certificates.FirstOrDefaultAsync(ce => ce.Id == id);
@@ -114,7 +109,7 @@ namespace FinalProject.Back.Controllers
             if (System.IO.File.Exists(imagePath))
             {
                 var imageBytes = System.IO.File.ReadAllBytes(imagePath);
-                return File(imageBytes, "image/jpg"); 
+                return File(imageBytes, "image/jpg");
             }
 
             return NotFound();
