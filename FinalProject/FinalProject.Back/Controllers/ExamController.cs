@@ -1,6 +1,7 @@
 ﻿using FinalProject.Back.Contexts;
 using FinalProject.Data.Dtos.ExamDtos;
 using FinalProject.Data.Entities.Exam;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -34,6 +35,7 @@ namespace FinalProject.Back.Controllers
 			return Ok(result);
 		}
 		[HttpGet("Marker/{markerId}")]
+		[Authorize(Roles = "admin")]
 		public async Task<ActionResult<IEnumerable<AnswerDto>>> GetMarkerExams(int markerId)
 		{
 			var result = await _context.Exam.Where(x => x.MarkerId == markerId && !x.Marked)
@@ -74,8 +76,9 @@ namespace FinalProject.Back.Controllers
 		}
 
 
-		// endpoint to create examTemplate
+		// endpoint to assign Marker
 		[HttpPost("AddMarker")]
+		[Authorize(Roles = "admin")]
 		public async Task<ActionResult<ExamDto>> CreateExamTemplate(ExamDto exam)
 		{
 			var result = await _context.Exam.FirstOrDefaultAsync(x => x.Id == exam.Id);
@@ -85,6 +88,7 @@ namespace FinalProject.Back.Controllers
 		}
 		// endpoint to create examTemplate
 		[HttpPost]
+		[Authorize(Roles = "admin")]
 		public async Task<ActionResult<ExamTemplateDto>> CreateExamTemplate(ExamTemplateDto examTemplate)
 		{
 			var result = await _context.ExamTemplate.AddAsync(ExamTemplate.ToEntity(examTemplate));

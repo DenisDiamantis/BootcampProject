@@ -1,6 +1,7 @@
 ﻿using FinalProject.Back.Contexts;
 using FinalProject.Data.Dtos.CertificateDtos;
 using FinalProject.Data.Entities;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -22,7 +23,7 @@ namespace FinalProject.Back.Controllers
 		//UserCertificate CRUD
 
 		[HttpPost("{examId}")]
-		//[Authorize(Roles = "admin")]
+		[Authorize(Roles = "admin")]
 		public async Task<ActionResult> CreateUserCertificate(int examId)
 		{
 
@@ -60,24 +61,6 @@ namespace FinalProject.Back.Controllers
 			return Ok(result);
 		}
 
-
-		//[HttpPut("{id}")]
-		//[Authorize(Roles = "admin")]
-		//public async Task<ActionResult<UserCertificateViewDto>> UpdateUserCertificateDto(int id, string status)
-		//{
-		//	var userCertificate = await _context.UserCertificates.FirstOrDefaultAsync(x => x.Id == id);
-
-		//	if (userCertificate == null)
-		//	{
-		//		return NotFound();
-		//	}
-
-		//	userCertificate.UpdateStatus(status);
-
-		//	await _context.SaveChangesAsync();
-
-		//	return Ok(UserCertificateViewDto.FromEntity(userCertificate));
-		//}
 
 
 	}

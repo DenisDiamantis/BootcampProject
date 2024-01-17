@@ -29,15 +29,6 @@
 				<td>@examTemplate.MinScore</td>
 				<td>@examTemplate.ExamDate</td>
 				
-				<td>
-
-					<a asp-page="./Details" asp-route-id="@examTemplate.Id">Details</a>
-					@if (User.IsInRole("admin"))
-					{
-						<a asp-page="./Edit" asp-route-id="@examTemplate.Id"> | Edit |</a>
-						<a asp-page="./Delete" asp-route-id="@examTemplate.Id">Delete</a>
-					}
-				</td>
 			</tr>
 		}
 	</tbody>

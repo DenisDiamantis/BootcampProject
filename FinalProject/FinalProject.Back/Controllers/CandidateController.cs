@@ -147,6 +147,7 @@ namespace FinalProject.Back.Controllers
 
 		// delete candidate
 		[HttpDelete("{id}")]
+		[Authorize(Roles = "admin")]
 		public async Task<ActionResult<CandidateDto>> DeleteCandidate(int id)
 		{
 			var candidate = await _context.Candidates.Include(x => x.User)

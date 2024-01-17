@@ -183,6 +183,8 @@ namespace FinalProject.Back.Controllers
 			return Ok("You are authorized user (admin)");
 		}
 
+		//get Markers
+		[Authorize(Roles = "admin")]
 		[HttpGet("GetMarkers")]
 		public async Task<ActionResult<IEnumerable<UserProfileDto>>> GetMarkers()
 		{
