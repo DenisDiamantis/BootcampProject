@@ -2,6 +2,7 @@ using FinalProject.Data.Dtos;
 using FinalProject.Data.Dtos.CertificateDtos;
 using FinalProject.Data.Dtos.ExamDtos;
 using FinalProject.Front.Services;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace FinalProject.Front.Pages.Certificates
@@ -38,11 +39,11 @@ namespace FinalProject.Front.Pages.Certificates
 			_examId = examId;
 		}
 
-		public async Task OnPostAsync()
+		public async Task<IActionResult> OnPostAsync()
 		{
 
 			await _userCertificateService.CreateUserCertificateAsync(_examId);
-			Redirect("./Index");
+			return RedirectToPage("/Exams/Index");
 		}
 	}
 }

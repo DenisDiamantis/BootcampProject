@@ -28,7 +28,7 @@
 					{
 						<td>"Failed"</td>
 					}
-					if (@exam.Marked)
+					@if (@exam.Marked)
 					{
 						<td>Finished</td>
 					}
@@ -36,8 +36,7 @@
 					{
 						<td>Pending</td>
 					}
-				}
-					<td>-</td>
+				
 					<td><a asp-page="/Markers/Evaluation" asp-route-examId="@exam.Id">Evaluate</a></td>
 
 			</tr>

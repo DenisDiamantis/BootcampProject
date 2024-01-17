@@ -1,7 +1,6 @@
 ﻿using FinalProject.Back.Contexts;
 using FinalProject.Data.Dtos.CertificateDtos;
 using FinalProject.Data.Entities;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -23,7 +22,7 @@ namespace FinalProject.Back.Controllers
 		//UserCertificate CRUD
 
 		[HttpPost("{examId}")]
-		[Authorize(Roles = "admin")]
+		//[Authorize(Roles = "admin")]
 		public async Task<ActionResult> CreateUserCertificate(int examId)
 		{
 
@@ -40,7 +39,7 @@ namespace FinalProject.Back.Controllers
 		}
 
 		[HttpGet]
-		[Authorize(Roles = "admin")]
+		//[Authorize(Roles = "admin")]
 		public async Task<ActionResult<IEnumerable<UserCertificateViewDto>>> GetAllCertificates()
 		{
 

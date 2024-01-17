@@ -63,7 +63,7 @@
 					{
 						if (exam.Marked&&exam.Result)
 						{
-							<a asp-page="./UserCertificate" asp-route-id="@exam.Id">View Certificate</a>
+							<a asp-page="/Certificates/CandidateCertificate" asp-route-id="@exam.Id">View Certificate</a>
 						}
 						else
 						{

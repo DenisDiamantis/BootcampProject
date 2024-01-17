@@ -60,7 +60,7 @@
 	<thead>
 		<tr>
 			<th>Exam ID</th>
-			<th>CandidateId</th>
+			<th>Candidate Number</th>
 			<th>Certificate</th>
 			<th>Candidate Score</th>
 			<th>Result</th>
@@ -124,34 +124,34 @@
 							var userCertificateCheck = Model.UserCertificates.FirstOrDefault(x => x.UserId == Model.Candidates.FirstOrDefault(c => c.Number == exam.CandidateNumber)!.UserId);
 							if(userCertificateCheck is not null)
 							{
-								if (userCertificateCheck.CertificateId == exam.Id)
+								if (userCertificateCheck.CertificateId == exam.CertificateId)
 									{
 										<td>Certificate Issued</td>
 									}
-									else
-									{
-								<td><a asp-page="/Certificates/IssueCertificate" asp-route-examId="@exam.Id">Issue Certificate</a></td>
+									
 							}
-						}
-
-					}
-					else
-					{
-						if (!exam.Result)
+						else
 						{
-							<td>Resolved.</td>
+							<td><a asp-page="/Certificates/IssueCertificate" asp-route-examId="@exam.Id">Issue Certificate</a></td>
+						}
 						}
 						else
 						{
-							<td>Not marked yet.</td>
-						}
-						
-						}
-						
-					}
+							if (!exam.Result)
+								{
+								<td>Resolved.</td>
+								}
+							else
+								{
+								<td>Not marked yet.</td>
+								}
 
+					}
+	
+}
 
 			</tr>
+		
 		}
 	</tbody>
 </table>
