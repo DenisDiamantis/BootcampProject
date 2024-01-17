@@ -21,7 +21,7 @@ namespace FinalProject.Back.Controllers
 
 		// get all candidates
 		[HttpGet]
-		[Authorize(Roles = "admin")]
+		[Authorize(Roles = "admin,qualityAssurance")]
 		public async Task<ActionResult<IEnumerable<CandidateDto>>> GetAllCandidatesAsync()
 		{
 			var result = await _context.Candidates.Include(x => x.User)
@@ -78,7 +78,7 @@ namespace FinalProject.Back.Controllers
 
 		// create candidate
 		[HttpPost]
-		//[Authorize(Roles = "admin,candidate")]
+		[Authorize(Roles = "admin,candidate")]
 		public async Task<ActionResult<CandidateDto>> CreateCandidate(CandidateDto candidateDto)
 		{
 			if (!ModelState.IsValid)

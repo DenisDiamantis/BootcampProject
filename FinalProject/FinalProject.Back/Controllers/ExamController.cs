@@ -35,7 +35,7 @@ namespace FinalProject.Back.Controllers
 			return Ok(result);
 		}
 		[HttpGet("Marker/{markerId}")]
-		[Authorize(Roles = "admin")]
+		[Authorize(Roles = "admin,marker")]
 		public async Task<ActionResult<IEnumerable<AnswerDto>>> GetMarkerExams(int markerId)
 		{
 			var result = await _context.Exam.Where(x => x.MarkerId == markerId && !x.Marked)
@@ -148,7 +148,7 @@ namespace FinalProject.Back.Controllers
 			}
 		}
 
-
+		//create exam
 		[HttpPost("createExam/{userId}/{certId}")]
 		public async Task<ActionResult<ExamDto>> CreateExam(int userId, int certId)
 		{
@@ -170,6 +170,7 @@ namespace FinalProject.Back.Controllers
 
 		//add questions for exam
 		[HttpPost("AddQuestions")]
+		[Authorize(Roles = "admin")]
 		public async Task<ActionResult<QuestionTemplateDto>> AddQuestion(QuestionTemplateDto question)
 		{
 

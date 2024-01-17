@@ -50,7 +50,13 @@
 				<td>
 
 					<a asp-page="./Details" asp-route-id="@certificate.Id">Details</a>
-					<a asp-page="./Buy" asp-route-id="@certificate.Id">Buy</a>
+	
+
+					@if(User.IsInRole("candidate"))
+					{
+						<a asp-page="./Buy" asp-route-id="@certificate.Id">Buy</a>
+					}
+					
 					@if (User.IsInRole("admin"))
 					{
 						<a asp-page="./Edit" asp-route-id="@certificate.Id"> | Edit |</a>
@@ -59,9 +65,14 @@
 				</td>
 		</tr>
 	}
+	
 </tbody>
-</table>
 
+</table>
+@if (!User.Identity.IsAuthenticated)
+{
+	<p>Log in to purchase cerficate exam.</p>
+}
 <div>
 	@if (User.IsInRole("admin"))
 	{
