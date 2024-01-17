@@ -18,29 +18,34 @@
 {
 
 	
-	<table class>
+	<table class="table-borderless">
 		<tr>
 			@{j++;}
-			<td>@j ) @item.QuestionText ?</td>
+			<td class ="fw-bolder">@j ) @item.QuestionText ?</td>
+			<br />
 		</tr>
 		<tr>
 			<td>
-				<input id="AnswerA" type="radio" name="@item.Id" class="rb" value="A @item.AnswerA"/>A) @item.AnswerA
+				<input id="AnswerA" type="radio" name="@item.Id" class="form-check-input" value="A @item.AnswerA"/>A) @item.AnswerA
+				<label class="form-check-laber" for="AnswerA"/>
 			</td>
 		</tr>
 		<tr>
 			<td>
-				<input id="AnswerB" type="radio" name="@item.Id" class="rb" value="B @item.AnswerB" />B) @item.AnswerB
+				<input id="AnswerB" type="radio" name="@item.Id" class="form-check-input" value="B @item.AnswerB" />B) @item.AnswerB
+				<label class="form-check-laber" for="AnswerB"/>
 			</td>
 		</tr>
 		<tr>
 			<td>
-				<input id="AnswerC" type="radio" name="@item.Id" class="rb" value="C @item.AnswerC" />C) @item.AnswerC
+				<input id="AnswerC" type="radio" name="@item.Id" class="form-check-input" value="C @item.AnswerC" />C) @item.AnswerC
+				<label class="form-check-laber" for="AnswerC"/>
 			</td>
 		</tr>
 		<tr>
 			<td>
-				<input id="AnswerD" type="radio" name="@item.Id" class="rb" value="D @item.AnswerD" />D) @item.AnswerD
+				<input id="AnswerD" type="radio" name="@item.Id" class="form-check-input" value="D @item.AnswerD" />D) @item.AnswerD
+				<label class="form-check-laber" for="AnswerD"/>
 			</td>
 		</tr>
 		<br />
