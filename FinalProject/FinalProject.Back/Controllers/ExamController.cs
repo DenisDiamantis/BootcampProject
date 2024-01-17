@@ -78,8 +78,8 @@ namespace FinalProject.Back.Controllers
 
 		// endpoint to assign Marker
 		[HttpPost("AddMarker")]
-		[Authorize(Roles = "admin")]
-		public async Task<ActionResult<ExamDto>> CreateExamTemplate(ExamDto exam)
+
+		public async Task<ActionResult<ExamDto>> AssignMarker(ExamDto exam)
 		{
 			var result = await _context.Exam.FirstOrDefaultAsync(x => x.Id == exam.Id);
 			result.MarkerId = exam.MarkerId;
