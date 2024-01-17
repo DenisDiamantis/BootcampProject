@@ -3,6 +3,11 @@
 @{
 	ViewData["Title"] = "Exam";
 }
+<head>
+	<style>
+		</style>
+</head>
+
 
 <h2>Exam</h2>
 
@@ -12,7 +17,7 @@
 @foreach(var item in Model.Questions)
 {
 
-
+	
 	<table class>
 		<tr>
 			@{j++;}
@@ -38,30 +43,28 @@
 				<input id="AnswerD" type="radio" name="@item.Id" class="rb" value="D @item.AnswerD" />D) @item.AnswerD
 			</td>
 		</tr>
+		<br />
 	</table>
 
 	}
+
+	<hr/>
 <button id="button1" type="button" value="Submit" class="btn-success" onclick="getAnswers();">Submit</button>
-<label id="Answers"></label>
+
 
 <script>
 	function getAnswers() {
-		document.getElementById("Answers").innerHTML = "";
 		
 		var result = document.getElementsByTagName("input");
 		for (i = 0; i < result.length; i++) {
 			if (result[i].type == "radio") {
-				if (result[i].checked) {
-					document.getElementById("Answers").innerHTML += "QuestionId: " + result[i].name + ")" +
-						"Your selected answer is: " + result[i].value.charAt(0) + "<br/>";
-						
+				if (result[i].checked) { 
 
 					var CandidateAnswer = {
 						"examId": @ViewData["examId"],
 						"questionTemplateId": parseInt(result[i].name),
 						"candidateAnswer": result[i].value.charAt(0)
 					}
-					console.log(CandidateAnswer);
 					$.ajax({
 						url: 'https://localhost:7193/api/Exam/saveAnswers',
 						type: 'POST',

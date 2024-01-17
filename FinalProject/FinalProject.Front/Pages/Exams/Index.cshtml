@@ -121,19 +121,18 @@
 						<td>@exam.MarkerId</td>
 						if (exam.Marked && exam.Result&&exam.Evaluation)
 						{
-							var userCertificateCheck = Model.UserCertificates.FirstOrDefault(x => x.UserId == Model.Candidates.FirstOrDefault(c => c.Number == exam.CandidateNumber)!.UserId);
-							if(userCertificateCheck is not null)
+							var userCertificateCheck = Model.UserCertificates.Where(x => x.UserId == Model.Candidates.FirstOrDefault(c => c.Number == exam.CandidateNumber)!.UserId);
+						if (userCertificateCheck is not null && userCertificateCheck.FirstOrDefault(cert => cert.CertificateId == exam.CertificateId) is not null)
 							{
-								if (userCertificateCheck.CertificateId == exam.CertificateId)
-									{
-										<td>Certificate Issued</td>
-									}
+							
+								<td>Certificate Issued</td>
 									
 							}
-						else
-						{
-							<td><a asp-page="/Certificates/IssueCertificate" asp-route-examId="@exam.Id">Issue Certificate</a></td>
-						}
+							else
+							{
+								<td><a asp-page="/Certificates/IssueCertificate" asp-route-examId="@exam.Id">Issue Certificate</a></td>
+							}
+						
 						}
 						else
 						{
