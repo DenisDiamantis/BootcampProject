@@ -1,0 +1,106 @@
+﻿@page
+@model FinalProject.Front.Pages.Candidates.DetailsModel
+@{
+	ViewData["Title"] = "Details";
+}
+<head>
+	<style>
+		/* Add custom styles for buttons and image */
+		.btn-primary {
+			background-color: #3498db; /* Blue color for primary button */
+			color: #fff;
+			transition: background-color 0.3s ease;
+			margin-right: 10px; /* Add margin between buttons */
+		}
+
+			.btn-primary:hover {
+				background-color: #2980b9; /* Darker blue on hover */
+			}
+
+		.btn-success {
+			background-color: #2ecc71; /* Green color for success button */
+			color: #fff;
+			transition: background-color 0.3s ease;
+		}
+
+			.btn-success:hover {
+				background-color: #27ae60; /* Darker green on hover */
+			}
+
+		.certificate-image {
+			max-width: 50%; /* Set the maximum width to 100% to make the image responsive */
+			height: auto; /* Maintain aspect ratio */
+		}
+
+		.button-container {
+			margin-top: 10px; /* Add margin above the buttons */
+		}
+		/* Customize the "Edit" button to be green */
+		.btn-edit {
+			background-color: #2ecc71; /* Green color for the "Edit" button */
+			color: #fff;
+			transition: background-color 0.3s ease;
+			margin-right: 10px; /* Add margin between buttons */
+		}
+
+			.btn-edit:hover {
+				background-color: #27ae60; /* Darker green on hover */
+			}
+	</style>
+</head>
+<h1>Candidate Details</h1>
+
+<div>
+	<h4>
+		@Html.DisplayFor(model => model.Candidate.FirstName)
+		@Html.DisplayFor(model => model.Candidate.LastName)
+	</h4>
+	<hr />
+	<dl class="row">
+		<dt class="col-sm-2">
+			@Html.DisplayNameFor(model => model.Candidate.FirstName)
+		</dt>
+		<dd class="col-sm-10">
+			@Html.DisplayFor(model => model.Candidate.FirstName)
+		</dd>
+		<dt class="col-sm-2">
+			@Html.DisplayNameFor(model => model.Candidate.LastName)
+		</dt>
+		<dd class="col-sm-10">
+			@Html.DisplayFor(model => model.Candidate.LastName)
+		</dd>
+		<dt class="col-sm-2">
+			@Html.DisplayNameFor(model => model.Candidate.Email)
+		</dt>
+		<dd class="col-sm-10">
+			@Html.DisplayFor(model => model.Candidate.Email)
+		</dd>
+		<dt class="col-sm-2">
+			@Html.DisplayNameFor(model => model.Candidate.Address)
+		</dt>
+		<dd class="col-sm-10">
+			@Html.DisplayFor(model => model.Candidate.Address)
+		</dd>
+		<dt class="col-sm-2">
+			@Html.DisplayNameFor(model => model.Candidate.Phone)
+		</dt>
+		<dd class="col-sm-10">
+			@Html.DisplayFor(model => model.Candidate.Phone)
+		</dd>
+		<dt class="col-sm-2">
+			@Html.DisplayNameFor(model => model.Candidate.BirthDate)
+		</dt>
+		<dd class="col-sm-10">
+			@Html.DisplayFor(model => model.Candidate.BirthDate)
+		</dd>
+</dl>
+</div>
+<p>	@if (User.IsInRole("admin")){
+	<a class="btn btn-primary" asp-page="./Edit" asp-route-id="@Model.Candidate.Id">Edit</a> 
+	}
+	<a class="btn btn-primary"  asp-page="./Index">Back to List</a>
+		
+</p>
+
+
+

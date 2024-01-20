@@ -7,11 +7,44 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\FinalProject.Data\FinalProject.Data.csproj" />
+    <Compile Remove="Pages\Folders\**" />
+    <Content Remove="Pages\Folders\**" />
+    <EmbeddedResource Remove="Pages\Folders\**" />
+    <None Remove="Pages\Folders\**" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Pages\Folders\" />
+    <Content Remove="Pages\Exams\Delete.cshtml" />
+    <Content Remove="Pages\Exams\Details.cshtml" />
+    <Content Remove="Pages\Exams\Edit.cshtml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="Pages\Certificates\Create.cshtml" />
+    <None Include="Pages\Certificates\Delete.cshtml" />
+    <None Include="Pages\Certificates\Details.cshtml" />
+    <None Include="Pages\Certificates\Edit.cshtml" />
+    <None Include="Pages\Exams\Delete.cshtml" />
+    <None Include="Pages\Exams\Details.cshtml" />
+    <None Include="Pages\Exams\Edit.cshtml" />
+    <None Include="wwwroot\css\Details.css" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="HandleBars.NET" Version="2.1.4" />
+    <PackageReference Include="IronPdf" Version="2024.1.20" />
+    <PackageReference Include="IronPdf.Extensions.Razor" Version="2023.9.1" />
+    <PackageReference Include="Microsoft.AspNetCore.Components.QuickGrid.EntityFrameworkAdapter" Version="8.0.0" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="8.0.0" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="8.0.0">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="8.0.0" />
+  </ItemGroup>
+
+<ItemGroup>
+    <ProjectReference Include="..\FinalProject.Data\FinalProject.Data.csproj" />
   </ItemGroup>
 
 </Project>

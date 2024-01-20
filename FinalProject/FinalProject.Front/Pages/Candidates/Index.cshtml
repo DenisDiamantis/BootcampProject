@@ -1,0 +1,78 @@
+﻿@page
+@model FinalProject.Front.Pages.Candidates.IndexModel
+@{
+	ViewData["Title"] = "Index";
+}
+<head>
+	<style>
+		/* Add custom styles for buttons */
+		.btn {
+			cursor: pointer;
+			transition: background-color 0.3s ease;
+		}
+
+			.btn:hover {
+				background-color: #007bff; /* Change to the color you prefer on hover */
+				color: #fff;
+			}
+
+		.btn-danger {
+			background-color: #dc3545; /* Red color for danger */
+			color: #fff;
+		}
+
+			.btn-danger:hover {
+				background-color: #bd2130; /* Darker red on hover */
+			}
+		/* Add style for smaller Candidate Number */
+		.small-candidate-number {
+			font-size: 12px; /* Adjust the font size as needed */
+		}
+	</style>
+</head>
+<h1>Candidates</h1>
+
+
+<table class="table">
+	<thead>
+		<tr>
+			<th>First Name</th>
+			<th>Last Name</th>
+			<th>Candidate Number</th>
+			<th>Email</th>
+			<th>Address</th>
+			<th>Phone</th>
+			<th>Birthdate</th>
+		</tr>
+
+</thead>
+<tbody>
+	@foreach (var candidate in Model.Candidates)
+	{
+		<tr>
+			<td>@candidate.FirstName</td>
+			<td>@candidate.LastName</td>
+			<td>@candidate.Number</td>
+			<td>@candidate.Email</td>
+			<td>@candidate.Address</td>
+			<td>@candidate.Phone</td>
+			<td>@candidate.BirthDate</td>
+			<td>
+				
+				<a asp-page="./Details" asp-route-id="@candidate.Id">Details</a>
+				@if (User.IsInRole("admin")){
+						<a asp-page="./Edit" asp-route-id="@candidate.Id"> | Edit |</a>
+						<a asp-page="./Delete" asp-route-id="@candidate.Id">Delete</a>
+				}
+			</td>
+		</tr>
+	}
+</tbody>
+</table>
+@if (User.IsInRole("admin"))
+{
+	<div>
+		<a class="btn btn-primary" asp-page="/Candidates/Create">Create New Candidate</a>
+	</div>
+}
+

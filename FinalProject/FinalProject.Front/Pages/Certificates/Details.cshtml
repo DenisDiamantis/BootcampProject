@@ -1,0 +1,79 @@
+﻿@page
+@model FinalProject.Front.Pages.Certificates.DetailsModel
+@{
+    ViewData["Title"] = "Details";
+}
+<head>
+   <style >
+body {
+    background-color: #f8f9fa; /* Light Gray background color */
+    font-family: 'Arial', sans-serif; /* Change font family */
+}
+
+h1 {
+    color: #007bff; /* Blue color for headings */
+    text-align: center;
+}
+
+table {
+    width: 100%;
+    margin-top: 20px;
+    border-collapse: collapse;
+    background-color: #ffffff; /* White background color for the table */
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+}
+
+th, td {
+    border: 1px solid #007bff;
+    padding: 8px;
+    text-align: left;
+}
+
+th {
+    background-color: #007bff; /* Blue color for table headers */
+    color: #ffffff; /* White color for text in table headers */
+}
+
+.btn-primary {
+    background-color: #007bff; /* Blue color for primary buttons */
+    border-color: #007bff;
+    margin-top: 10px; /* Add margin to separate the button from the table */
+}
+
+    .btn-primary:hover {
+        background-color: #0056b3; /* Darker shade for hover background color */
+        border-color: #0056b3;
+    }
+
+</style>
+</head>
+<h1>Certificate Details</h1>
+
+<div>
+    <h2>@Model.Certificate.Title</h2>
+    <p>@Model.Certificate.Description</p>
+    <p>Cost: $@Model.Certificate.Cost</p>
+
+    @{
+        // Assuming ImageUrl contains the URL to fetch the image
+        byte[] imageData = Model.ImageUrl;
+    }
+
+    @if (imageData != null && imageData.Length > 0)
+    {
+        <img src="data:image/jpeg;base64,@Convert.ToBase64String(imageData)" alt="Certificate Image" />
+    }
+    else
+    {
+        <p>Error: No image available</p>
+    }
+</div>
+
+<p>
+    @if (User.IsInRole("admin"))
+    {
+        <a class="btn btn-primary" asp-page="./Edit" asp-route-id="@Model.Certificate.Id">Edit</a>
+    }
+    <a class="btn btn-primary" asp-page="./Index">Back to List</a>
+</p>

@@ -1,4 +1,5 @@
-﻿<!DOCTYPE html>
+﻿
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -19,16 +20,29 @@
                     </button>
                     <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                         <ul class="navbar-nav flex-grow-1">
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-page="/Index">Home</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-page="/Privacy">Privacy</a>
-                            </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-page="/GetUsers">GetUsers</a>
-                        </li>
-                        </ul>
+
+                        @if  (User.IsInRole("admin"))
+                        {
+                            <partial name="_AdminPartial" />
+                        }
+                        else if(User.IsInRole("qualityAssurance"))
+                        {
+                            <partial name="_QualityAssurancePartial" />
+                        }
+                        else if (User.IsInRole("marker"))
+                        {
+                            <partial name="_MarkersPartial" />
+                        }
+                        else if (User.IsInRole("candidate"))
+                        {
+                            <partial name="_CandidatePartial" />
+                        }
+                        else
+                        {
+                            <partial name="_ClientPartial" />
+                        }
+                    </ul>
+
                     </div>
                     <partial name="_LoginPartial" />
             </div>
