@@ -1,10 +1,9 @@
 ﻿using FinalProject.Back.Contexts;
-using FinalProject.Data.Dtos.AcountDtos;
+using FinalProject.Data.Dtos;
 using FinalProject.Data.Entities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
@@ -12,319 +11,272 @@ using System.Text;
 
 namespace FinalProject.Back.Controllers
 {
-	[Route("api/[controller]")]
-	[ApiController]
-	public class AccountController : ControllerBase
-	{
-		private readonly IConfiguration configuration;
-		private readonly CertificationDbContext context;
+    [Route("api/[controller]")]
+    [ApiController]
+    public class AccountController : ControllerBase
+    {
+        private readonly IConfiguration configuration;
+        private readonly CertificationDbContext context;
 
-		public AccountController(IConfiguration configuration, CertificationDbContext context)
-		{
-			this.configuration = configuration;
-			this.context = context;
-		}
+        public AccountController(IConfiguration configuration, CertificationDbContext context)
+        {
+            this.configuration = configuration;
+            this.context = context;
+        }
 
 
-		[HttpPost("register")]
-		public IActionResult Register(UserDto userDto)
-		{
-			var emailCount = context.Users.Count(u => u.Email == userDto.Email);
-			if (emailCount > 0)
-			{
-				ModelState.AddModelError("Email", "Email already exists");
-				return BadRequest(ModelState);
-			}
+        [HttpPost("register")]
+        public IActionResult Register(UserDto userDto)
+        {
+            var emailCount = context.Users.Count(u => u.Email == userDto.Email);
+            if (emailCount > 0)
+            {
+                ModelState.AddModelError("Email", "Email already exists");
+                return BadRequest(ModelState);
+            }
 
-			if (!ModelState.IsValid)
-			{
-				return BadRequest(ModelState);
-			}
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
 
-			//encrypt password
-			var passwordHasher = new PasswordHasher<User>();
-			var encryptedPassword = passwordHasher.HashPassword(new User(), userDto.Password);
+            //encrypt password
+            var passwordHasher = new PasswordHasher<User>();
+            var encryptedPassword = passwordHasher.HashPassword(new User(), userDto.Password);
 
-			User user = new User()
-			{
-				FirstName = userDto.FirstName,
-				LastName = userDto.LastName,
-				Email = userDto.Email,
-				Phone = userDto.Phone ?? "",
-				Address = userDto.Address,
-				Password = encryptedPassword,
-				Role = "candidate",
-				CreatedAt = DateTime.Now
-			};
+            User user = new User()
+            {
+                FirstName = userDto.FirstName,
+                LastName = userDto.LastName,
+                Email = userDto.Email,
+                Phone = userDto.Phone ?? "",
+                Address = userDto.Address,
+                Password = encryptedPassword,
+                Role = "candidate",
+                CreatedAt = DateTime.Now
+            };
 
-			context.Users.Add(user);
-			context.SaveChanges();
+            context.Users.Add(user);
+            context.SaveChanges();
 
-			var jwt = CreateJWToken(user);
+            var jwt = CreateJWToken(user);
 
-			UserProfileDto userProfileDto = new UserProfileDto()
-			{
-				Id = user.Id,
-				FirstName = user.FirstName,
-				LastName = user.LastName,
-				Email = user.Email,
-				Phone = user.Phone,
-				Address = user.Address,
-				Role = user.Role,
-				CreatedAt = user.CreatedAt
-			};
+            UserProfileDto userProfileDto = new UserProfileDto()
+            {
+                Id = user.Id,
+                FirstName = user.FirstName,
+                LastName = user.LastName,
+                Email = user.Email,
+                Phone = user.Phone,
+                Address = user.Address,
+                Role = user.Role,
+                CreatedAt = user.CreatedAt
+            };
 
-			var response = new
-			{
-				Token = jwt,
-				user = userProfileDto
-			};
+            var response = new
+            {
+                Token = jwt,
+                user = userProfileDto
+            };
 
-			return Ok(response);
-		}
+            return Ok(response);
+        }
 
-		//marker creation
-		[HttpPost]
-		public IActionResult CreateAccount(UserDto userDto)
-		{
-			var emailCount = context.Users.Count(u => u.Email == userDto.Email);
-			if (emailCount > 0)
-			{
-				ModelState.AddModelError("Email", "Email already exists");
-				return BadRequest(ModelState);
-			}
+        //POST api/account/login
+        [HttpPost("login")]
+        public IActionResult Login(LoginDto model)
+        {
+            var user = context.Users.FirstOrDefault(u => u.Email == model.Email);
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            if (user == null)
+            {
+                ModelState.AddModelError("Email", "Invalid email");
+                return BadRequest(ModelState);
+            }
 
-			if (!ModelState.IsValid)
-			{
-				return BadRequest(ModelState);
-			}
+            var passwordHasher = new PasswordHasher<User>();
+            var result = passwordHasher.VerifyHashedPassword(new User(), user.Password, model.Password);
+            if (result == PasswordVerificationResult.Failed)
+            {
+                ModelState.AddModelError("Password", "Invalid password");
+                return BadRequest(ModelState);
+            }
 
-			//encrypt password
-			var passwordHasher = new PasswordHasher<User>();
-			var encryptedPassword = passwordHasher.HashPassword(new User(), userDto.Password);
+            var jwt = CreateJWToken(user);
 
-			User user = new User()
-			{
-				FirstName = userDto.FirstName,
-				LastName = userDto.LastName,
-				Email = userDto.Email,
-				Phone = userDto.Phone ?? "",
-				Address = userDto.Address,
-				Password = encryptedPassword,
-				Role = "marker",
-				CreatedAt = DateTime.Now
-			};
+            UserProfileDto userProfileDto = new UserProfileDto()
+            {
+                Id = user.Id,
+                FirstName = user.FirstName,
+                LastName = user.LastName,
+                Email = user.Email,
+                Phone = user.Phone,
+                Address = user.Address,
+                Role = user.Role,
+                CreatedAt = user.CreatedAt
+            };
 
-			context.Users.Add(user);
-			context.SaveChanges();
+            var response = new
+            {
+                Token = jwt,
+                user = userProfileDto
+            };
 
-			return Ok(UserProfileDto.FromEntity(user));
-		}
-		//POST api/account/login
-		[HttpPost("login")]
-		public IActionResult Login(LoginDto model)
-		{
-			var user = context.Users.FirstOrDefault(u => u.Email == model.Email);
-			if (!ModelState.IsValid)
-			{
-				return BadRequest(ModelState);
-			}
-			if (user == null)
-			{
-				ModelState.AddModelError("Email", "Invalid email");
-				return BadRequest(ModelState);
-			}
+            return Ok(response);
 
-			var passwordHasher = new PasswordHasher<User>();
-			var result = passwordHasher.VerifyHashedPassword(new User(), user.Password, model.Password);
-			if (result == PasswordVerificationResult.Failed)
-			{
-				ModelState.AddModelError("Password", "Invalid password");
-				return BadRequest(ModelState);
-			}
+        }
 
-			var jwt = CreateJWToken(user);
+        //Authorize Authenticated Users
+        [Authorize(Roles = "admin")]
+        [HttpGet("GetAuthenticatedUser")]
+        public IActionResult GetAuthenticatedUser()
+        {
+            return Ok("You are authorized user (client or admin)");
+        }
 
-			UserProfileDto userProfileDto = new UserProfileDto()
-			{
-				Id = user.Id,
-				FirstName = user.FirstName,
-				LastName = user.LastName,
-				Email = user.Email,
-				Phone = user.Phone,
-				Address = user.Address,
-				Role = user.Role,
-				CreatedAt = user.CreatedAt
-			};
-
-			var response = new
-			{
-				Token = jwt,
-				user = userProfileDto
-			};
-
-			return Ok(response);
-
-		}
-
-		//Authorize Authenticated Users
-		[Authorize(Roles = "admin")]
-		[HttpGet("GetAuthenticatedUser")]
-		public IActionResult GetAuthenticatedUser()
-		{
-			return Ok("You are authorized user (client or admin)");
-		}
-
-		//Authorize Admin Users
-		[Authorize(Roles = "admin")]
-		[HttpGet("GetAdminUser")]
-		public IActionResult GetAdminUser()
-		{
-			return Ok("You are authorized user (admin)");
-		}
-
-		//get Markers
-		[Authorize(Roles = "admin")]
-		[HttpGet("GetMarkers")]
-		public async Task<ActionResult<IEnumerable<UserProfileDto>>> GetMarkers()
-		{
-			var result = await context.Users.Where(r => r.Role == "marker")
-				.Select(x => UserProfileDto.FromEntity(x))
-				.ToListAsync();
-
-			return Ok(result);
-		}
-
-		//GET api/account/GetAllUsers
-		[Authorize(Roles = "admin")]
-		[HttpGet("GetAllUsers")]
-		public IActionResult GetAllUsers()
-		{
-			var users = context.Users.ToList();
-			return Ok(users);
-		}
-
-		//GET api/account/GetProfile
-		[HttpGet("GetProfile")]
-		public IActionResult GetProfile(int id)
-		{
-			var user = context.Users.Find(id);
-			if (user == null)
-			{
-				return NotFound();
-			}
-
-			UserProfileDto userProfileDto = new UserProfileDto()
-			{
-				Id = user.Id,
-				FirstName = user.FirstName,
-				LastName = user.LastName,
-				Email = user.Email,
-				Phone = user.Phone,
-				Address = user.Address,
-				Role = user.Role,
-				CreatedAt = user.CreatedAt
-			};
-
-			return Ok(userProfileDto);
-		}
-
-		//PUT api/account/ChangePassword
-		[HttpPut("ChangePassword")]
-		public IActionResult ChangePassword(int id, string oldPassword, string newPassword)
-		{
-			var user = context.Users.Find(id);
-			if (user == null)
-			{
-				return NotFound();
-			}
-
-			var passwordHasher = new PasswordHasher<User>();
-			var result = passwordHasher.VerifyHashedPassword(user, user.Password, oldPassword);
-			if (result == PasswordVerificationResult.Failed)
-			{
-				ModelState.AddModelError("OldPassword", "Invalid password");
-				return BadRequest(ModelState);
-			}
-
-			var encryptedPassword = passwordHasher.HashPassword(new User(), newPassword);
-			user.Password = encryptedPassword;
-			context.SaveChanges();
-
-			return Ok();
-		}
-
-		//PUT api/account/UpdateProfile
-		[HttpPut("UpdateProfile")]
-		public IActionResult UpdateProfile(int id, UserDto userDto)
-		{
-			var user = context.Users.Find(id);
-			if (user == null)
-			{
-				return NotFound();
-			}
-
-			var emailCount = context.Users.Count(u => u.Email == userDto.Email && u.Id != id);
-			if (emailCount > 0)
-			{
-				ModelState.AddModelError("Email", "Email already exists");
-				return BadRequest(ModelState);
-			}
-
-			user.FirstName = userDto.FirstName;
-			user.LastName = userDto.LastName;
-			user.Email = userDto.Email;
-			user.Phone = userDto.Phone ?? "";
-			user.Address = userDto.Address;
-
-			context.SaveChanges();
-
-			return Ok();
-		}
+        //Authorize Admin Users
+        [Authorize(Roles = "admin")]
+        [HttpGet("GetAdminUser")]
+        public IActionResult GetAdminUser()
+        {
+            return Ok("You are authorized user (admin)");
+        }
 
 
 
-		//DELETE api/account/DeleteAccount
-		[HttpDelete("DeleteAccount")]
-		public IActionResult DeleteAccount(int id)
-		{
-			var user = context.Users.Find(id);
-			if (user == null)
-			{
-				return NotFound();
-			}
+        //GET api/account/GetAllUsers
+        [Authorize(Roles = "admin")]
+        [HttpGet("GetAllUsers")]
+        public IActionResult GetAllUsers()
+        {
+            var users = context.Users.ToList();
+            return Ok(users);
+        }
 
-			context.Users.Remove(user);
-			context.SaveChanges();
+        //GET api/account/GetProfile
+        [HttpGet("GetProfile")]
+        public IActionResult GetProfile(int id)
+        {
+            var user = context.Users.Find(id);
+            if (user == null)
+            {
+                return NotFound();
+            }
 
-			return Ok();
-		}
+            UserProfileDto userProfileDto = new UserProfileDto()
+            {
+                Id = user.Id,
+                FirstName = user.FirstName,
+                LastName = user.LastName,
+                Email = user.Email,
+                Phone = user.Phone,
+                Address = user.Address,
+                Role = user.Role,
+                CreatedAt = user.CreatedAt
+            };
 
-		//create json web token
-		private string CreateJWToken(User user)
-		{
-			List<Claim> claims = new List<Claim>()
-			{
-				new Claim("id", "" + user.Id),
-				new Claim("role", user.Role)
-			};
-			string strKey = configuration["JwtSettings:Key"];
-			var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(strKey));
-			var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
+            return Ok(userProfileDto);
+        }
 
-			var token = new JwtSecurityToken(
-				issuer: configuration["JwtSettings:Issuer"],
-				audience: configuration["JwtSettings:Audience"],
-				claims: claims,
-				expires: DateTime.Now.AddDays(1),
-				signingCredentials: creds
-				);
+        //PUT api/account/ChangePassword
+        [HttpPut("ChangePassword")]
+        public IActionResult ChangePassword(int id, string oldPassword, string newPassword)
+        {
+            var user = context.Users.Find(id);
+            if (user == null)
+            {
+                return NotFound();
+            }
 
-			var jwt = new JwtSecurityTokenHandler().WriteToken(token);
+            var passwordHasher = new PasswordHasher<User>();
+            var result = passwordHasher.VerifyHashedPassword(user, user.Password, oldPassword);
+            if (result == PasswordVerificationResult.Failed)
+            {
+                ModelState.AddModelError("OldPassword", "Invalid password");
+                return BadRequest(ModelState);
+            }
+
+            var encryptedPassword = passwordHasher.HashPassword(new User(), newPassword);
+            user.Password = encryptedPassword;
+            context.SaveChanges();
+
+            return Ok();
+        }
+
+        //PUT api/account/UpdateProfile
+        [HttpPut("UpdateProfile")]
+        public IActionResult UpdateProfile(int id, UserDto userDto)
+        {
+            var user = context.Users.Find(id);
+            if (user == null)
+            {
+                return NotFound();
+            }
+
+            var emailCount = context.Users.Count(u => u.Email == userDto.Email && u.Id != id);
+            if (emailCount > 0)
+            {
+                ModelState.AddModelError("Email", "Email already exists");
+                return BadRequest(ModelState);
+            }
+
+            user.FirstName = userDto.FirstName;
+            user.LastName = userDto.LastName;
+            user.Email = userDto.Email;
+            user.Phone = userDto.Phone ?? "";
+            user.Address = userDto.Address;
+
+            context.SaveChanges();
+
+            return Ok();
+        }
 
 
-			return jwt;
-		}
-	}
+
+        //DELETE api/account/DeleteAccount
+        [HttpDelete("DeleteAccount")]
+        public IActionResult DeleteAccount(int id)
+        {
+            var user = context.Users.Find(id);
+            if (user == null)
+            {
+                return NotFound();
+            }
+
+            context.Users.Remove(user);
+            context.SaveChanges();
+
+            return Ok();
+        }
+
+        //create json web token
+        private string CreateJWToken(User user)
+        {
+            List<Claim> claims = new List<Claim>()
+            {
+                new Claim("id", ""+user.Id),
+                new Claim("role", user.Role)
+            };
+            string strKey = configuration["JwtSettings:Key"];
+            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(strKey));
+            var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
+
+            var token = new JwtSecurityToken(
+                issuer: configuration["JwtSettings:Issuer"],
+                audience: configuration["JwtSettings:Audience"],
+                claims: claims,
+                expires: DateTime.Now.AddDays(1),
+                signingCredentials: creds
+                );
+
+            var jwt = new JwtSecurityTokenHandler().WriteToken(token);
+
+
+            return jwt;
+        }
+    }
 
 }
