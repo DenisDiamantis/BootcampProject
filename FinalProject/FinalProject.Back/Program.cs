@@ -1,13 +1,10 @@
 using FinalProject.Back.Contexts;
-using FinalProject.Data.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.Filters;
 using System.Text;
-using Microsoft.AspNetCore.Hosting;
-
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -16,9 +13,9 @@ var builder = WebApplication.CreateBuilder(args);
 // add connection string to the configuration
 builder.Services.AddDbContext<CertificationDbContext>(options =>
 	options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-builder.Services.AddScoped<IFileStorageService, LocalFileStorageService>();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(options =>
 {
@@ -64,7 +61,10 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 	}
 	);
 
-builder.Services.AddHttpContextAccessor();
+
+
+builder.Services.AddAuthentication();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -79,6 +79,7 @@ app.UseHttpsRedirection();
 app.UseRouting();
 
 app.UseCors("CorsPolicy"); // Apply the CORS policy
+
 
 app.UseAuthentication();
 

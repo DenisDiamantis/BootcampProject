@@ -4,45 +4,8 @@
 @{
     ViewData["Title"] = " Home page";
 }
-<head>
-    <style>
-        body {
-            background-color: #f8f9fa; /* Light Gray background color */
-            font-family: 'Arial', sans-serif; /* Change font family */
-        }
 
-        .text-center {
-            text-align: center;
-        }
-
-        h1 {
-            color: #007bff; /* Blue color for headings */
-            font-size: 2.5em; /* Keep the font size for the heading */
-        }
-
-        p {
-            color: #555; /* Dark Gray color for paragraphs */
-            font-size: 1.5em; /* Keep the font size for the paragraph */
-        }
-
-        .img-fluid {
-            height: auto;
-            max-width: 300px; /* Keep the image responsive */
-            border-radius: 50%; /* Keep the image a circle */
-        }
-    </style>
-</head>
 <div class="text-center">
     <h1 class="display-4">Welcome</h1>
     <p>Certify your future</p>
-    <img src="/finalFrontImage.png" class="img-fluid rounded-circle" style="max-width: 300px; height: auto;" />
 </div>
-
-@* dummy code to display claims *@
-
-@* @{
-    foreach (var claim in User.Claims)
-    {
-        <p>@claim.Type: @claim.Value</p>
-    }
-} *@

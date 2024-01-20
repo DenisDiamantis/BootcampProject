@@ -1,4 +1,4 @@
-﻿using FinalProject.Data.Dtos.AcountDtos;
+﻿using FinalProject.Data.Dtos;
 using FinalProject.Front.Helpers;
 using FinalProject.Front.Services;
 using Microsoft.AspNetCore.Authentication;
@@ -47,21 +47,30 @@ namespace FinalProject.Front.Pages
 				if (result.IsSuccess)
 				{
 
+
 					var claims = new List<Claim>
 					{
 						new Claim(ClaimTypes.Name,result.User.FirstName+" "+result.User.LastName ),
 						new Claim(ClaimTypes.Role, result.User.Role!),
 						new Claim(ClaimTypes.Hash, result.Token),
 						new Claim(ClaimTypes.Email, result.User.Email),
-						new Claim(ClaimTypes.NameIdentifier, result.User.Id.ToString()),
-						
+                        
                         // You can add other claims as needed
                     };
 
 					var claimsIdentity = new ClaimsIdentity(claims, "CookieAuthentication");
 					var claimsPrincipal = new ClaimsPrincipal(claimsIdentity);
 					await HttpContext.SignInAsync("CookieAuthentication", claimsPrincipal);
-					return Redirect("/");
+
+					// Redirect to the appropriate page after successful login
+					if (result.User.Role == "admin")
+					{
+						return Redirect("/AdminHome");
+					}
+					else
+					{
+						return Redirect("/");
+					}
 				}
 				else
 				{

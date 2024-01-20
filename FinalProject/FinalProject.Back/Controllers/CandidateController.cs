@@ -8,163 +8,122 @@ using Microsoft.EntityFrameworkCore;
 
 namespace FinalProject.Back.Controllers
 {
-	[Route("api/[controller]")]
-	[ApiController]
-	public class CandidateController : Controller
-	{
-		private readonly CertificationDbContext _context;
+    [Route("api/[controller]")]
+    [ApiController]
+    public class CandidateController : Controller
+    {
+        private readonly CertificationDbContext _context;
 
-		public CandidateController(CertificationDbContext context)
-		{
-			_context = context;
-		}
+        public CandidateController(CertificationDbContext context)
+        {
+            _context = context;
+        }
 
-		// get all candidates
-		[HttpGet]
-		[Authorize(Roles = "admin,qualityAssurance")]
-		public async Task<ActionResult<IEnumerable<CandidateDto>>> GetAllCandidatesAsync()
-		{
-			var result = await _context.Candidates.Include(x => x.User)
-				.Select(x => CandidateDto.FromEntity(x))
-				.ToListAsync();
+        [HttpGet]
+        //[Authorize(Roles = "admin")]
+        public async Task<ActionResult<IEnumerable<CandidateDto>>> GetAllCertificates()
+        {
+            var result = await _context.Candidates.Include(x => x.User)
+                .Select(x => CandidateDto.FromEntity(x))
+                .ToListAsync();
 
-			return Ok(result);
-		}
+            return Ok(result);
+        }
 
-		// get candidate by id
-		[HttpGet("{id}")]
-		public async Task<ActionResult<CandidateDto>> GetCandidateById(int id)
-		{
-			var candidate = await _context.Candidates.Include(x => x.User)
-				.FirstOrDefaultAsync(x => x.Id == id);
+        [HttpGet]
+        [Route("{id}")]
+        public async Task<ActionResult<CandidateDto>> GetCandidateById(int id)
+        {
+            var candidate = await _context.Candidates.Include(x => x.User)
+                .FirstOrDefaultAsync(x => x.Id == id);
 
-			if (candidate == null)
-			{
-				return NotFound();
-			}
+            if (candidate == null)
+            {
+                return NotFound();
+            }
 
-			return Ok(CandidateDto.FromEntity(candidate));
-		}
-		// get candidate by id
-		[HttpGet("Number/{candidateNumber}")]
-		public async Task<ActionResult<CandidateDto>> GetCandidateByNUmber(Guid candidateNumber)
-		{
-			var candidate = await _context.Candidates.Include(x => x.User)
-				.FirstOrDefaultAsync(x => x.Number == candidateNumber);
+            return Ok(CandidateDto.FromEntity(candidate));
+        }
 
-			if (candidate == null)
-			{
-				return NotFound();
-			}
+        [HttpPost]
+        public async Task<ActionResult<CandidateDto>> CreateCandidate(CandidateDto candidateDto)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            var passwordHasher = new PasswordHasher<User>();
+            var encryptedPassword = passwordHasher.HashPassword(new User(), candidateDto.Password);
+            var user = new User()
+            {
+                FirstName = candidateDto.FirstName,
+                LastName = candidateDto.LastName,
+                Email = candidateDto.Email,
+                Phone = candidateDto.Phone ?? "",
+                Address = candidateDto.Address,
+                Password = encryptedPassword,
+                Role = "candidate",
+                CreatedAt = DateTime.Now
+            };
 
-			return Ok(CandidateDto.FromEntity(candidate));
-		}
+            var candidate = new Candidate()
+            {
+                Number = Guid.NewGuid(),
+                BirthDate = candidateDto.BirthDate,
+                User = user
+            };
 
-		// get candidate by user id
-		[HttpGet("user/{userId}")]
-		public async Task<ActionResult<CandidateDto>> GetCandidateByUserId(int userId)
-		{
-			var candidate = await _context.Candidates.Include(x => x.User)
-				.FirstOrDefaultAsync(x => x.User.Id == userId);
+            _context.Candidates.Add(candidate);
+            await _context.SaveChangesAsync();
 
-			if (candidate == null)
-			{
-				return NotFound();
-			}
+            return Ok(candidateDto);
+        }
 
-			return Ok(CandidateDto.FromEntity(candidate));
-		}
+        [HttpPost]
+        [Route("id")]
+        public async Task<ActionResult<CandidateDto>> UpdateCandidate(int id, CandidateDto candidateDto)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
 
+            var candidate = await _context.Candidates.Include(x => x.User)
+                .FirstOrDefaultAsync(x => x.Id == id);
 
-		// create candidate
-		[HttpPost]
-		public async Task<ActionResult<CandidateDto>> CreateCandidate(CandidateDto candidateDto)
-		{
-			if (!ModelState.IsValid)
-			{
-				return BadRequest(ModelState);
-			}
-			var passwordHasher = new PasswordHasher<User>();
-			var encryptedPassword = passwordHasher.HashPassword(new User(), candidateDto.Password);
-			var user = new User()
-			{
-				FirstName = candidateDto.FirstName,
-				LastName = candidateDto.LastName,
-				Email = candidateDto.Email,
-				Phone = candidateDto.Phone ?? "",
-				Address = candidateDto.Address,
-				Password = encryptedPassword,
-				Role = "candidate",
-				CreatedAt = DateTime.Now
-			};
+            if (candidate == null)
+            {
+                return NotFound();
+            }
 
-			var candidate = new Candidate()
-			{
-				Number = Guid.NewGuid(),
-				BirthDate = candidateDto.BirthDate,
-				User = user
-			};
+            candidate.User.FirstName = candidateDto.FirstName;
+            candidate.User.LastName = candidateDto.LastName;
+            candidate.User.Email = candidateDto.Email;
+            candidate.User.Phone = candidateDto.Phone;
+            candidate.User.Address = candidateDto.Address;
+            candidate.BirthDate = candidateDto.BirthDate;
 
-			_context.Candidates.Add(candidate);
-			await _context.SaveChangesAsync();
+            await _context.SaveChangesAsync();
 
-			return Ok(candidateDto);
-		}
+            return Ok(CandidateDto.FromEntity(candidate));
+        }
 
-		// update candidate
-		[HttpPut("{id}")]
-		public async Task<ActionResult<CandidateDto>> UpdateCandidate(int id, CandidateDto candidateDto)
-		{
-			if (!ModelState.IsValid)
-			{
-				return BadRequest(ModelState);
-			}
+        [HttpDelete]
+        [Route("{id}")]
+        public async Task<ActionResult<CandidateDto>> DeleteCandidate(int id)
+        {
+            var candidate = await _context.Candidates.Include(x => x.User)
+                .FirstOrDefaultAsync(x => x.Id == id);
 
-			var candidate = await _context.Candidates.Include(x => x.User)
-				.FirstOrDefaultAsync(x => x.Id == id);
+            if (candidate == null)
+            {
+                return NotFound();
+            }
 
-			var passwordHasher = new PasswordHasher<User>();
-			var encryptedPassword = passwordHasher.HashPassword(new User(), candidateDto.Password);
+            _context.Candidates.Remove(candidate);
+            await _context.SaveChangesAsync();
 
-			if (candidate == null)
-			{
-				return NotFound();
-			}
-
-			candidate.User.FirstName = candidateDto.FirstName;
-			candidate.User.LastName = candidateDto.LastName;
-			candidate.User.Email = candidateDto.Email;
-			candidate.User.Password = encryptedPassword;
-			candidate.User.Phone = candidateDto.Phone;
-			candidate.User.Address = candidateDto.Address;
-			candidate.BirthDate = candidateDto.BirthDate;
-
-			await _context.SaveChangesAsync();
-
-			return Ok(CandidateDto.FromEntity(candidate));
-		}
-
-		// delete candidate
-		[HttpDelete("{id}")]
-		[Authorize(Roles = "admin")]
-		public async Task<ActionResult<CandidateDto>> DeleteCandidate(int id)
-		{
-			var candidate = await _context.Candidates.Include(x => x.User)
-				.FirstOrDefaultAsync(x => x.Id == id);
-
-
-			if (candidate == null)
-			{
-				return NotFound();
-			}
-
-			_context.Candidates.Remove(candidate);
-
-			//delete user as well
-			_context.Users.Remove(candidate.User);
-			await _context.SaveChangesAsync();
-
-			return Ok(CandidateDto.FromEntity(candidate));
-		}
-	}
+            return Ok(CandidateDto.FromEntity(candidate));
+        }
+    }
 }
