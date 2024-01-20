@@ -2,7 +2,7 @@
 Project Requirments :
 
 Complete system with user roles, security, login system and REST API architecture 
-Based on the previous part of the Assignment 4 (Part B), you need to create a system that, supports the following roles 
+you need to create a system that, supports the following roles 
 
 Admin (Full Rights to all data) 
 Marking (Right to mark assigned exam(s) at a specific time) 
