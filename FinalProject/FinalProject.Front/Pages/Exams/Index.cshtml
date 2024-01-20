@@ -16,7 +16,6 @@
 				<th>Certificate</th>
 				<th>Number of Questions</th>
 				<th>Minimum correct Answers</th>
-				<th>Exam Date</th>
 			</tr>
 
 		</thead>
@@ -28,7 +27,6 @@
 					<td>@Model.Certificates.FirstOrDefault(x=>x.Id==examTemplate.CertificateId)!.Title</td>
 					<td>@examTemplate.MaxScore</td>
 					<td>@examTemplate.MinScore</td>
-					<td>@examTemplate.ExamDate</td>
 
 				</tr>
 			}

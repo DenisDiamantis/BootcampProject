@@ -19,7 +19,7 @@ namespace FinalProject.Data.Entities.Exam
 				CertificateId = examTemplate.CertificateId,
 				MaxScore = examTemplate.MaxScore,
 				MinScore = examTemplate.MinScore,
-				ExamDate = examTemplate.ExamDate
+
 			};
 		}
 

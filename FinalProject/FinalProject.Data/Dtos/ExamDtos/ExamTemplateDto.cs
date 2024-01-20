@@ -2,11 +2,10 @@
 
 namespace FinalProject.Data.Dtos.ExamDtos
 {
-    public class ExamTemplateDto
+	public class ExamTemplateDto
 	{
 		public int Id { get; set; }
 		public int CertificateId { get; set; }
-		public DateTime ExamDate { get; set; }
 		public int MaxScore { get; set; }
 		public int MinScore { get; set; }
 
@@ -20,7 +19,6 @@ namespace FinalProject.Data.Dtos.ExamDtos
 				MaxScore = examTemplate.MaxScore,
 				MinScore = examTemplate.MinScore,
 
-				ExamDate = examTemplate.ExamDate,
 			};
 		}
 	}
