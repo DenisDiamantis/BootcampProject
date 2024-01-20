@@ -22,7 +22,7 @@ Mark the assigned unmarked Exams
 for the Quality Control role create a UI for viewing, 
 Candidates 
 Certifications 
-Exams 
+Exams
 
 for the eShop, you are asked to design a UI that, 
 a candidate can see all the products (certificates) 
